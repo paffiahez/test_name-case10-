@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная | Portal{% endblock %}
+
+{% block content %}
+    <!-- Сетка плиток 2x2 -->
+    <div class="tiles">
+        <a href="#" class="tile tile--blue">Кнопка 4</a>
+        <a href="#" class="tile">Кнопка 5</a>
+        <a href="#" class="tile">Кнопка 6</a>
+        <a href="#" class="tile">Кнопка 7</a>
+    </div>
+
+    <!-- Круглые кнопки справа -->
+    <aside class="side">
+        <a href="#" class="round-btn">
+            <span class="round-btn__label">Кнопка 8</span>
+            <span class="round-btn__icon">
+                <svg viewBox="0 0 24 24" fill="white"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg>
+            </span>
+        </a>
+        <a href="#" class="round-btn">
+            <span class="round-btn__label">Кнопка 9</span>
+            <span class="round-btn__icon"></span>
+        </a>
+    </aside>
+{% endblock %}
