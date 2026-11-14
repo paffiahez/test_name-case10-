@@ -1,6 +1,6 @@
-from django.shortcuts import get_object_or_404, render
-
-from .models import Event
+from django.shortcuts import get_object_or_404, render, redirect
+from django.utils import timezone
+from .models import Event, EventRequest
 
 
 def event_list(request):
@@ -35,3 +35,20 @@ def event_list(request):
         'querystring': querystring,
         'filters': {'format': fmt, 'type': typ, 'org': org, 'sort': sort},
     })
+
+
+def event_request(request):
+    if request.method == 'POST':
+        org_type_default = Event.OrgType.EMPLOYER
+        req = EventRequest.objects.create(
+            title=request.POST.get('title', ''),
+            event_type=request.POST.get('event_type', ''),
+            format=request.POST.get('format', ''),
+            date=request.POST.get('date') or timezone.now().date(),
+            duration=request.POST.get('duration', ''),
+            organization=request.POST.get('organization', ''),
+            address=request.POST.get('address') or '—',
+            description=request.POST.get('description', ''),
+        )
+        return redirect(f'/events/?sent=1#{req.pk}')
+    return redirect('event_list')
