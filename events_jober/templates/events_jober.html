@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мероприятия | Работодатель</title>
     <style>
-        /* ... (оставляем стили, как были) ... */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fcfcfc; color: #333; margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
         .container { max-width: 1200px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; border-top: 5px solid #8b0000; }
         h1 { text-align: center; color: #8b0000; padding: 30px 20px 10px; margin: 0; font-size: 28px; }
@@ -15,35 +14,12 @@
         .btn-request { display: inline-block; background-color: #fff0f0; color: #8b0000; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: all 0.2s; border: 1px solid #8b0000; cursor: pointer; }
         .btn-request:hover { background-color: #8b0000; color: white; }
 
-        /* Модальное окно */
-         .modal { 
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(0,0,0,0.5); 
-            overflow-y: auto; /* <--- ДОБАВЛЕНО: разрешаем прокрутку внутри окна, если контент не влезает */
-        }
-        .modal-content { 
-            background-color: #fefefe; 
-            margin: 5% auto; /* <--- Отступ сверху и авто-центрирование */
-            padding: 30px; 
-            border: 1px solid #888; 
-            width: 90%; 
-            max-width: 600px; 
-            border-radius: 12px; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2); 
-            position: relative; 
-            /* Убираем жесткое ограничение по высоте, чтобы окно могло растягиваться по содержимому */
-        }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 30px; border: 1px solid #888; width: 90%; max-width: 600px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; }
         .close-btn { color: #aaa; position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close-btn:hover { color: #8b0000; }
         .modal-content h2 { color: #8b0000; margin-top: 0; }
         
-        /* Поля формы в модальном окне */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: bold; color: #555; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
@@ -51,7 +27,6 @@
         .modal-content .btn-submit { width: 100%; padding: 12px; background-color: #8b0000; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .modal-content .btn-submit:hover { background-color: #5a0000; }
 
-        /* ... (фильтры и карточки оставляем как были) ... */
         .filters { display: flex; justify-content: center; gap: 15px; padding: 0 40px 30px; flex-wrap: wrap; border-bottom: 1px solid #eee; margin-bottom: 20px; }
         .filter-group { display: flex; align-items: center; gap: 8px; }
         .filter-group label { font-size: 14px; color: #555; font-weight: 500; }
@@ -103,36 +78,19 @@
     <div class="filters">
         <div class="filter-group">
             <label for="sortDate">Дата:</label>
-            <select id="sortDate">
-                <option value="asc">По возрастанию</option>
-                <option value="desc">По убыванию</option>
-            </select>
+            <select id="sortDate"><option value="asc">По возрастанию</option><option value="desc">По убыванию</option></select>
         </div>
         <div class="filter-group">
             <label for="filterFormat">Формат:</label>
-            <select id="filterFormat">
-                <option value="all">Все</option>
-                <option value="Офлайн">Офлайн</option>
-                <option value="Онлайн">Онлайн</option>
-            </select>
+            <select id="filterFormat"><option value="all">Все</option><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select>
         </div>
         <div class="filter-group">
             <label for="filterType">Тип:</label>
-            <select id="filterType">
-                <option value="all">Все</option>
-                <option value="Лекция">Лекция</option>
-                <option value="Экскурсия">Экскурсия</option>
-                <option value="Олимпиада">Олимпиада</option>
-                <option value="Мастер-класс">Мастер-класс</option>
-            </select>
+            <select id="filterType"><option value="all">Все</option><option value="Лекция">Лекция</option><option value="Экскурсия">Экскурсия</option><option value="Олимпиада">Олимпиада</option><option value="Мастер-класс">Мастер-класс</option></select>
         </div>
         <div class="filter-group">
             <label for="filterOrg">Организатор:</label>
-            <select id="filterOrg">
-                <option value="all">Все</option>
-                <option value="uni">От вуза</option>
-                <option value="employer">От работодателей</option>
-            </select>
+            <select id="filterOrg"><option value="all">Все</option><option value="uni">От вуза</option><option value="employer">От работодателей</option></select>
         </div>
     </div>
 
@@ -145,11 +103,11 @@
     </div>
 </div>
 
-<!-- Модальное окно для заявки (с полями как при добавлении) -->
+<!-- Модальное окно для заявки -->
 <div id="requestModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeModalBtn">&times;</span>
-        <h2>Заявка вузу на добавление мероприятия</h2>
+        <h2>Заявка вузу</h2>
         <p>Заполните поля, и вуз рассмотрит вашу заявку.</p>
         <form id="requestForm">
             <div class="form-group">
@@ -193,7 +151,7 @@
 </div>
 
 <script>
-    // --- Данные (как в твоем коде) ---
+    // --- Данные ---
     let defaultEvents = [
         { id: 1, title: 'Олимпиада по информатике', date: '2026-04-15', format: 'Офлайн', type: 'Олимпиада', orgType: 'uni', time: '3 ч. 00 мин.', org: 'Приемная комиссия ТулГУ', address: 'г. Тула, пр. Ленина, д. 92', desc: 'Проверьте свои знания в области программирования.' },
         { id: 2, title: 'Ярмарка вакансий "Карьера 2026"', date: '2026-05-20', format: 'Офлайн', type: 'Лекция', orgType: 'uni', time: '4 ч. 00 мин.', org: 'Центр карьеры ТулГУ', address: 'г. Тула, ул. Ф. Энгельса, д. 155', desc: 'Крупнейшее карьерное событие региона.' },
@@ -202,7 +160,14 @@
         { id: 5, title: 'Онлайн-вебинар "Поступление"', date: '2026-07-01', format: 'Онлайн', type: 'Лекция', orgType: 'uni', time: '1 ч. 00 мин.', org: 'Приемная комиссия', address: '—', desc: 'Разбор всех изменений в правилах приема.' }
     ];
 
-    let eventsData = JSON.parse(localStorage.getItem('tulgu_events')) || defaultEvents;
+    // Инициализация данных
+    let eventsData;
+    if (localStorage.getItem('tulgu_events')) {
+        eventsData = JSON.parse(localStorage.getItem('tulgu_events'));
+    } else {
+        eventsData = defaultEvents;
+        localStorage.setItem('tulgu_events', JSON.stringify(eventsData));
+    }
 
     const programList = document.getElementById('programList');
     const detailsContainer = document.getElementById('detailsContainer');
@@ -221,7 +186,6 @@
     document.getElementById('requestForm').addEventListener('submit', (e) => {
         e.preventDefault();
         
-        // Собираем данные из формы заявки
         const newRequest = {
             id: Date.now(),
             dateSubmitted: new Date().toLocaleString('ru-RU'),
@@ -233,7 +197,7 @@
                 type: document.getElementById('reqType').value,
                 time: document.getElementById('reqTime').value,
                 org: document.getElementById('reqOrg').value,
-                orgType: 'employer', // Работодатель всегда отправляет от работодателя
+                orgType: 'employer', 
                 address: document.getElementById('reqAddress').value || '—',
                 desc: document.getElementById('reqDesc').value
             }
@@ -247,15 +211,13 @@
         document.getElementById('requestForm').reset();
         modal.style.display = 'none';
     });
-    // -----------------------
 
     function getOrgType(event) { return event.orgType || 'uni'; }
 
     function renderSite() {
-        // ... (код рендера списка и фильтров из твоего старого файла) ...
-        // Я его сократил для примера, но он должен быть полным
         programList.innerHTML = '';
         detailsContainer.innerHTML = '';
+
         if (eventsData.length === 0) { noResults.classList.add('show'); return; } else { noResults.classList.remove('show'); }
 
         const sortOrder = sortDateSelect.value;
@@ -314,6 +276,7 @@
     filterFormatSelect.addEventListener('change', renderSite);
     filterTypeSelect.addEventListener('change', renderSite);
     filterOrgSelect.addEventListener('change', renderSite);
+    
     renderSite();
 </script>
 </body>

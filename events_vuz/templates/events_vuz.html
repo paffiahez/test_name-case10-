@@ -14,13 +14,16 @@
         .btn-admin { display: inline-block; background-color: #8b0000; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: background 0.2s; box-shadow: 0 4px 6px rgba(139, 0, 0, 0.2); }
         .btn-admin:hover { background-color: #5a0000; }
 
-        /* --- Стили для блока уведомлений --- */
+        /* --- Уведомления --- */
         .notifications-panel { background: #fafafa; border: 1px solid #eee; border-left: 4px solid #8b0000; border-radius: 8px; padding: 20px; margin: 0 40px 30px; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .notifications-panel.active { display: block; animation: fadeIn 0.3s ease; }
         .notifications-panel h2 { margin-top: 0; color: #8b0000; font-size: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        
         .notification-item { background: white; border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .notification-item p { margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; }
-        .notification-item .meta { font-size: 12px; color: #999; margin-bottom: 10px; }
+        .notification-item h4 { margin: 0 0 5px 0; color: #333; font-size: 16px; }
+        .notification-item .req-details { font-size: 13px; color: #555; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px; }
+        .notification-item .req-details span { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; }
+        .notification-item .req-org { font-weight: bold; color: #8b0000; font-size: 14px; margin-bottom: 10px; }
         .notification-actions { display: flex; gap: 10px; }
         .btn-accept, .btn-reject { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; transition: background 0.2s; }
         .btn-accept { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
@@ -28,6 +31,7 @@
         .btn-reject { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
         .btn-reject:hover { background-color: #ffcdd2; }
 
+        /* --- Фильтры --- */
         .filters { display: flex; justify-content: center; gap: 15px; padding: 0 40px 30px; flex-wrap: wrap; border-bottom: 1px solid #eee; margin-bottom: 20px; }
         .filter-group { display: flex; align-items: center; gap: 8px; }
         .filter-group label { font-size: 14px; color: #555; font-weight: 500; }
@@ -74,12 +78,12 @@
     <div class="subtitle">Режим просмотра для сотрудников вуза</div>
 
     <div class="admin-link-container">
-        <a href="/craft/" class="btn-admin">✎ Редактировать мероприятия</a>
+        <a href="/vuz_craft/" class="btn-admin">✎ Редактировать мероприятия</a>
     </div>
 
     <!-- Блок уведомлений -->
     <div class="notifications-panel" id="notificationsPanel">
-        <h2>Уведомления от работодателей</h2>
+        <h2>Заявки от работодателей</h2>
         <div id="notificationsList"></div>
     </div>
 
@@ -129,7 +133,7 @@
 </div>
 
 <script>
-    // Данные для примера (взяты из твоего кода)
+    // --- Данные ---
     let defaultEvents = [
         { id: 1, title: 'Олимпиада по информатике', date: '2026-04-15', format: 'Офлайн', type: 'Олимпиада', orgType: 'uni', time: '3 ч. 00 мин.', org: 'Приемная комиссия ТулГУ', address: 'г. Тула, пр. Ленина, д. 92', desc: 'Проверьте свои знания в области программирования.' },
         { id: 2, title: 'Ярмарка вакансий "Карьера 2026"', date: '2026-05-20', format: 'Офлайн', type: 'Лекция', orgType: 'uni', time: '4 ч. 00 мин.', org: 'Центр карьеры ТулГУ', address: 'г. Тула, ул. Ф. Энгельса, д. 155', desc: 'Крупнейшее карьерное событие региона.' },
@@ -138,7 +142,13 @@
         { id: 5, title: 'Онлайн-вебинар "Поступление"', date: '2026-07-01', format: 'Онлайн', type: 'Лекция', orgType: 'uni', time: '1 ч. 00 мин.', org: 'Приемная комиссия', address: '—', desc: 'Разбор всех изменений в правилах приема.' }
     ];
 
-    let eventsData = JSON.parse(localStorage.getItem('tulgu_events')) || defaultEvents;
+    let eventsData;
+    if (localStorage.getItem('tulgu_events')) {
+        eventsData = JSON.parse(localStorage.getItem('tulgu_events'));
+    } else {
+        eventsData = defaultEvents;
+        localStorage.setItem('tulgu_events', JSON.stringify(eventsData));
+    }    let requestsData = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
 
     const programList = document.getElementById('programList');
     const detailsContainer = document.getElementById('detailsContainer');
@@ -150,8 +160,7 @@
 
     // --- Логика уведомлений ---
     function renderNotifications() {
-        let requests = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
-        const pending = requests.filter(r => r.status === 'pending');
+        const pending = requestsData.filter(r => r.status === 'pending');
         const panel = document.getElementById('notificationsPanel');
         const list = document.getElementById('notificationsList');
         
@@ -163,11 +172,18 @@
         panel.classList.add('active');
         
         pending.forEach(req => {
+            const ev = req.eventData;
             const div = document.createElement('div');
             div.className = 'notification-item';
             div.innerHTML = `
-                <p>${req.text}</p>
-                <div class="meta">Отправлено: ${req.date}</div>
+                <h4>${ev.title}</h4>
+                <div class="req-org">Организация: ${ev.org}</div>
+                <div class="req-details">
+                    <span>Тип: ${ev.type}</span>
+                    <span>Формат: ${ev.format}</span>
+                    <span>Дата: ${new Date(ev.date).toLocaleDateString('ru-RU')}</span>
+                    <span>Время: ${ev.time}</span>
+                </div>
                 <div class="notification-actions">
                     <button class="btn-accept" onclick="acceptRequest(${req.id})">Принять</button>
                     <button class="btn-reject" onclick="rejectRequest(${req.id})">Отклонить</button>
@@ -177,15 +193,27 @@
         });
     }
 
+    // Функция принятия заявки
     window.acceptRequest = (id) => {
         let requests = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
-        const idx = requests.findIndex(r => r.id === id);
-        if (idx !== -1) {
-            requests[idx].status = 'accepted';
-            localStorage.setItem('tulgu_requests', JSON.stringify(requests));
-            alert('Заявка принята! Вы можете добавить мероприятие в панели управления.');
-            window.location.href = '/events_vuz_craft/'; 
-        }
+        const reqIndex = requests.findIndex(r => r.id === id);
+        if (reqIndex === -1) return;
+
+        const req = requests[reqIndex];
+        const newEvent = { 
+            ...req.eventData, 
+            id: Date.now()
+        }; 
+
+        eventsData.push(newEvent);
+        localStorage.setItem('tulgu_events', JSON.stringify(eventsData));
+
+        requests[reqIndex].status = 'accepted';
+        localStorage.setItem('tulgu_requests', JSON.stringify(requests));
+        
+        renderNotifications();
+        renderSite();
+        alert('Мероприятие добавлено в список!');
     };
 
     window.rejectRequest = (id) => {
@@ -197,11 +225,8 @@
             renderNotifications();
         }
     };
-    // ---------------------------
 
-    function getOrgType(event) {
-        return event.orgType || 'uni';
-    }
+    function getOrgType(event) { return event.orgType || 'uni'; }
 
     function renderSite() {
         programList.innerHTML = '';
