@@ -1,4 +1,4 @@
-/* ===== Общие стили ===== */
+/* ==================== Общие стили ==================== */
 * {
     margin: 0;
     padding: 0;
@@ -14,10 +14,15 @@ a {
     text-decoration: none;
 }
 
-/* ===== Верхняя серая полоса ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==================== Главная: верхняя плашка ==================== */
 .top-bar {
-    background: #d9d9d9;
-    padding: 90px 20px 40px;
+    background: #d3d3d3;
+    padding: 20px;
     display: flex;
     justify-content: center;
 }
@@ -44,7 +49,7 @@ a {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== Общая раскладка: плитки + боковая колонка ===== */
+/* ==================== Главная: раскладка ==================== */
 .layout {
     display: flex;
     align-items: flex-start;
@@ -59,19 +64,19 @@ a {
     gap: 30px;
 }
 
-/* ===== Большие плитки ===== */
+/* Плитки-кнопки */
 .tile {
-    align-items: flex-start;
-    background: #26404a;
-    border-radius: 10px;
+    align-items: center;
+    background: #8b0000;
+    border-radius: 15px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-    color: #e53935;
+    color: white;
     display: flex;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     justify-content: center;
-    min-height: 350px;
-    padding-top: 40px;
+    min-height: 200px;
+    padding: 20px;
     transition: transform 0.15s, box-shadow 0.15s;
 }
 
@@ -84,7 +89,7 @@ a {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== Круглые кнопки справа ===== */
+/* ==================== Главная: круглые кнопки справа ==================== */
 .side {
     display: flex;
     flex-direction: column;
@@ -126,23 +131,28 @@ a {
     transform: scale(1.06);
 }
 
-/* ===== Адаптивность ===== */
-@media (max-width: 900px) {
-    .layout {
-        flex-direction: column;
-    }
+/* ==================== Каркас страниц ==================== */
+.main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; }
+.container { max-width: 1000px; width: 100%; background: #fff; border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;
+    border-top: 5px solid #8b0000; padding-bottom: 40px; }
+.page-title { text-align: center; color: #8b0000; padding: 30px 20px 10px;
+    margin: 0; font-size: 28px; }
+.subtitle { text-align: center; color: #666; margin-bottom: 30px;
+    font-size: 14px; padding: 0 20px; }
 
-    .side {
-        flex-direction: row;
-        padding-top: 0;
-        justify-content: center;
-    }
+/* ==================== Список направлений/мероприятий ==================== */
+.program-list { list-style: none; padding: 0; margin: 0; }
+.program-list li { padding: 12px 15px; margin-bottom: 6px; background: #f9f9f9;
+    border-left: 4px solid transparent; border-radius: 6px; cursor: pointer;
+    transition: all 0.2s; font-weight: 500; font-size: 14px; line-height: 1.3; }
+.program-list li:hover { background: #fff0f0; border-left-color: #8b0000; }
+.program-list li a { display: block; color: #333; text-decoration: none; }
+.program-list li:hover a { color: #8b0000; }
+.program-list li.active { background: #8b0000; border-left-color: #5a0000; }
+.program-list li.active a { color: #fff; }
 
-    .tiles {
-        grid-template-columns: 1fr;
-    }
-}
-/* ===== Мероприятия ===== */
+/* ==================== Мероприятия: фильтры и карточка ==================== */
 .filters { display: flex; justify-content: center; gap: 15px; padding: 0 40px 30px;
     flex-wrap: wrap; border-bottom: 1px solid #eee; margin-bottom: 20px; }
 .filter-group { display: flex; align-items: center; gap: 8px; }
@@ -152,10 +162,8 @@ a {
     outline: none; transition: border-color 0.2s; }
 .filters select:hover, .filters select:focus { border-color: #8b0000; }
 
-.program-list li a { display: block; color: inherit; text-decoration: none; }
-.program-list li.active a { color: #fff; }
-
 .details { flex: 2.5; min-width: 400px; padding-left: 20px; }
+.detail-card { animation: fadeIn 0.3s ease; }
 .detail-card h2 { color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000;
     padding-bottom: 12px; font-size: 22px; line-height: 1.3; }
 .info-row { display: flex; justify-content: space-between; align-items: flex-start;
@@ -172,37 +180,14 @@ a {
 .content { display: flex; gap: 30px; padding: 0 40px 40px; flex-wrap: wrap; }
 .sidebar { flex: 1; min-width: 280px; border-right: 1px solid #eee; padding-right: 30px; }
 
-@media (max-width: 768px) {
-    .filters { flex-direction: column; align-items: stretch; padding: 0 20px 20px; }
-    .filter-group { justify-content: space-between; }
-    .content { flex-direction: column; padding: 0 20px 20px; }
-    .sidebar { border-right: none; border-bottom: 1px solid #eee;
-        padding-right: 0; padding-bottom: 20px; }
-    .details { padding-left: 0; min-width: auto; }
-    .info-label { width: 140px; }
-}
+/* ==================== Переключатель режима просмотра ==================== */
+.role-switch { display: flex; justify-content: center; gap: 12px; padding-top: 20px; }
+.role-btn { padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;
+    color: #8b0000; border: 1px solid #8b0000; background: #fff; transition: all 0.2s; }
+.role-btn:hover { background: #fff0f0; }
+.role-btn.active { background: #8b0000; color: #fff; }
 
-/* ===== Каркас страницы (общий) ===== */
-.main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; }
-.container { max-width: 1000px; width: 100%; background: #fff; border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;
-    border-top: 5px solid #8b0000; padding-bottom: 40px; }
-.page-title { text-align: center; color: #8b0000; padding: 30px 20px 10px;
-    margin: 0; font-size: 28px; }
-.subtitle { text-align: center; color: #666; margin-bottom: 30px;
-    font-size: 14px; padding: 0 20px; }
-
-/* ===== Список направлений/мероприятий ===== */
-.program-list { list-style: none; padding: 0; margin: 0; }
-.program-list li { padding: 12px 15px; margin-bottom: 6px; background: #f9f9f9;
-    border-left: 4px solid transparent; border-radius: 6px; cursor: pointer;
-    transition: all 0.2s; font-weight: 500; font-size: 14px; line-height: 1.3; }
-.program-list li:hover { background: #fff0f0; border-left-color: #8b0000; }
-.program-list li a { display: block; color: #333; text-decoration: none; }
-.program-list li:hover a { color: #8b0000; }
-.program-list li.active { background: #8b0000; border-left-color: #5a0000; }
-.program-list li.active a { color: #fff; }
-/* ===== Заявка работодателя ===== */
+/* ==================== Заявка работодателя ==================== */
 .request-link-container { text-align: center; margin-bottom: 20px; }
 .btn-request { background: #fff0f0; color: #8b0000; padding: 12px 24px;
     border-radius: 6px; font-weight: bold; font-size: 16px; border: 1px solid #8b0000;
@@ -238,17 +223,7 @@ a {
     background: #fff0f0; border: 1px solid #8b0000; border-radius: 6px;
     color: #8b0000; font-weight: 600; text-align: center; }
 
-@media (max-width: 768px) {
-    .form-row { flex-direction: column; }
-}
-
-/* ===== Переключатель режима просмотра ===== */
-.role-switch { display: flex; justify-content: center; gap: 12px; padding-top: 20px; }
-.role-btn { padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;
-    color: #8b0000; border: 1px solid #8b0000; background: #fff; transition: all 0.2s; }
-.role-btn:hover { background: #fff0f0; }
-.role-btn.active { background: #8b0000; color: #fff; }
-/* ===== Страница сотрудника вуза ===== */
+/* ==================== Страница сотрудника вуза ==================== */
 .admin-link-container { text-align: center; margin-bottom: 20px; }
 .btn-admin { display: inline-block; background: #8b0000; color: #fff; text-decoration: none;
     padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;
@@ -281,6 +256,44 @@ a {
 .btn-reject { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
 .btn-reject:hover { background: #ffcdd2; }
 
+/* ==================== Карточки целевого обучения ==================== */
+.offers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px; padding: 0 40px 40px; }
+
+.offer-card { max-width: 380px; border: 1px solid #e0e0e0; border-radius: 12px;
+    padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s ease; background: #fff; }
+.offer-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+.offer-code { display: inline-block; background: #eef2ff; color: #3b5bdb;
+    font-size: 13px; font-weight: bold; padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 8px; }
+.offer-title { font-size: 18px; margin: 0 0 4px; color: #1a1a2e; }
+.offer-employer { color: #555; font-size: 14px; margin-bottom: 4px; }
+.offer-address { color: #888; font-size: 13px; margin-bottom: 12px; }
+.offer-dates { font-size: 13px; color: #444; margin-bottom: 12px; }
+.offer-dates span { color: #666; }
+.offer-stats { display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #eee; padding-top: 12px; font-size: 13px; }
+.offer-stats strong { font-size: 16px; color: #1a1a2e; }
+.offer-badge { font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
+.offer-badge.active { background: #e6f9ec; color: #2b8a3e; }
+.offer-badge.inactive { background: #fdeeee; color: #c92a2a; }
+
+/* ==================== Адаптивность ==================== */
+@media (max-width: 900px) {
+    .layout { flex-direction: column; }
+    .side { flex-direction: row; padding-top: 0; justify-content: center; }
+    .tiles { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 768px) {
+    .filters { flex-direction: column; align-items: stretch; padding: 0 20px 20px; }
+    .filter-group { justify-content: space-between; }
+    .content { flex-direction: column; padding: 0 20px 20px; }
+    .sidebar { border-right: none; border-bottom: 1px solid #eee;
+        padding-right: 0; padding-bottom: 20px; }
+    .details { padding-left: 0; min-width: auto; }
+    .info-label { width: 140px; }
     .notifications-panel { margin: 0 20px 20px; }
+    .form-row { flex-direction: column; }
 }
