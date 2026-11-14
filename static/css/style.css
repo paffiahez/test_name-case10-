@@ -142,3 +142,145 @@ a {
         grid-template-columns: 1fr;
     }
 }
+/* ===== Мероприятия ===== */
+.filters { display: flex; justify-content: center; gap: 15px; padding: 0 40px 30px;
+    flex-wrap: wrap; border-bottom: 1px solid #eee; margin-bottom: 20px; }
+.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-group label { font-size: 14px; color: #555; font-weight: 500; }
+.filters select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px;
+    background: #fff; font-family: inherit; font-size: 14px; cursor: pointer;
+    outline: none; transition: border-color 0.2s; }
+.filters select:hover, .filters select:focus { border-color: #8b0000; }
+
+.program-list li a { display: block; color: inherit; text-decoration: none; }
+.program-list li.active a { color: #fff; }
+
+.details { flex: 2.5; min-width: 400px; padding-left: 20px; }
+.detail-card h2 { color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000;
+    padding-bottom: 12px; font-size: 22px; line-height: 1.3; }
+.info-row { display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid #eee; gap: 20px; }
+.info-label { color: #777; flex-shrink: 0; font-size: 15px; width: 180px; }
+.info-value { font-weight: bold; color: #333; text-align: right; font-size: 15px; line-height: 1.5; }
+.info-value.highlight { background: #fff0f0; color: #8b0000; padding: 2px 8px;
+    border-radius: 4px; border: 1px solid #f0d0d0; }
+.info-value.description-text { text-align: right; font-weight: 400; color: #444; }
+
+.details-hint { color: #777; font-style: italic; padding: 20px 0; text-align: center; }
+.no-results { color: #777; font-style: italic; text-align: center; cursor: default; }
+
+.content { display: flex; gap: 30px; padding: 0 40px 40px; flex-wrap: wrap; }
+.sidebar { flex: 1; min-width: 280px; border-right: 1px solid #eee; padding-right: 30px; }
+
+@media (max-width: 768px) {
+    .filters { flex-direction: column; align-items: stretch; padding: 0 20px 20px; }
+    .filter-group { justify-content: space-between; }
+    .content { flex-direction: column; padding: 0 20px 20px; }
+    .sidebar { border-right: none; border-bottom: 1px solid #eee;
+        padding-right: 0; padding-bottom: 20px; }
+    .details { padding-left: 0; min-width: auto; }
+    .info-label { width: 140px; }
+}
+
+/* ===== Каркас страницы (общий) ===== */
+.main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; }
+.container { max-width: 1000px; width: 100%; background: #fff; border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;
+    border-top: 5px solid #8b0000; padding-bottom: 40px; }
+.page-title { text-align: center; color: #8b0000; padding: 30px 20px 10px;
+    margin: 0; font-size: 28px; }
+.subtitle { text-align: center; color: #666; margin-bottom: 30px;
+    font-size: 14px; padding: 0 20px; }
+
+/* ===== Список направлений/мероприятий ===== */
+.program-list { list-style: none; padding: 0; margin: 0; }
+.program-list li { padding: 12px 15px; margin-bottom: 6px; background: #f9f9f9;
+    border-left: 4px solid transparent; border-radius: 6px; cursor: pointer;
+    transition: all 0.2s; font-weight: 500; font-size: 14px; line-height: 1.3; }
+.program-list li:hover { background: #fff0f0; border-left-color: #8b0000; }
+.program-list li a { display: block; color: #333; text-decoration: none; }
+.program-list li:hover a { color: #8b0000; }
+.program-list li.active { background: #8b0000; border-left-color: #5a0000; }
+.program-list li.active a { color: #fff; }
+/* ===== Заявка работодателя ===== */
+.request-link-container { text-align: center; margin-bottom: 20px; }
+.btn-request { background: #fff0f0; color: #8b0000; padding: 12px 24px;
+    border-radius: 6px; font-weight: bold; font-size: 16px; border: 1px solid #8b0000;
+    cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.btn-request:hover { background: #8b0000; color: #fff; }
+
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.5); overflow-y: auto; }
+.modal-content { background: #fefefe; margin: 5% auto; padding: 30px;
+    border: 1px solid #888; width: 90%; max-width: 600px; border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; animation: fadeIn 0.3s ease; }
+.close-btn { color: #aaa; position: absolute; top: 15px; right: 20px;
+    font-size: 28px; font-weight: bold; cursor: pointer; }
+.close-btn:hover { color: #8b0000; }
+.modal-content h2 { color: #8b0000; margin-top: 0; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-size: 14px;
+    font-weight: bold; color: #555; }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;
+    font-family: inherit; font-size: 14px; box-sizing: border-box; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: #8b0000; outline: none; }
+.form-row { display: flex; gap: 15px; }
+.form-col { flex: 1; }
+.btn-submit { width: 100%; padding: 12px; background: #8b0000; color: #fff;
+    border: none; border-radius: 6px; font-size: 16px; font-weight: bold;
+    cursor: pointer; margin-top: 10px; font-family: inherit; }
+.btn-submit:hover { background: #5a0000; }
+
+.success-banner { max-width: 600px; margin: 0 auto 20px; padding: 12px 20px;
+    background: #fff0f0; border: 1px solid #8b0000; border-radius: 6px;
+    color: #8b0000; font-weight: 600; text-align: center; }
+
+@media (max-width: 768px) {
+    .form-row { flex-direction: column; }
+}
+
+/* ===== Переключатель режима просмотра ===== */
+.role-switch { display: flex; justify-content: center; gap: 12px; padding-top: 20px; }
+.role-btn { padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;
+    color: #8b0000; border: 1px solid #8b0000; background: #fff; transition: all 0.2s; }
+.role-btn:hover { background: #fff0f0; }
+.role-btn.active { background: #8b0000; color: #fff; }
+/* ===== Страница сотрудника вуза ===== */
+.admin-link-container { text-align: center; margin-bottom: 20px; }
+.btn-admin { display: inline-block; background: #8b0000; color: #fff; text-decoration: none;
+    padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;
+    box-shadow: 0 4px 6px rgba(139,0,0,0.2); transition: background 0.2s; }
+.btn-admin:hover { background: #5a0000; }
+
+.notifications-panel { background: #fafafa; border: 1px solid #eee;
+    border-left: 4px solid #8b0000; border-radius: 8px; padding: 20px;
+    margin: 0 40px 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+.notifications-panel h2 { margin-top: 0; color: #8b0000; font-size: 20px;
+    border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+.notification-item { background: #fff; border: 1px solid #eee; padding: 15px;
+    margin-bottom: 15px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+.notification-item h4 { margin: 0 0 5px; font-size: 16px; }
+.notification-item .req-org { font-weight: bold; color: #8b0000; font-size: 14px;
+    margin-bottom: 10px; }
+.notification-item .req-details { font-size: 13px; color: #555; margin-bottom: 10px;
+    display: flex; flex-wrap: wrap; gap: 10px; }
+.notification-item .req-details span { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; }
+.notification-item .req-desc { font-size: 13px; color: #444; margin: 0 0 10px; }
+.notification-actions { display: flex; gap: 10px; }
+.notification-actions form { margin: 0; }
+
+.btn-accept, .btn-reject { padding: 8px 15px; border: none; border-radius: 4px;
+    cursor: pointer; font-weight: bold; font-size: 13px; font-family: inherit;
+    transition: background 0.2s; }
+.btn-accept { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+.btn-accept:hover { background: #bbdefb; }
+.btn-reject { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+.btn-reject:hover { background: #ffcdd2; }
+
+@media (max-width: 768px) {
+    .notifications-panel { margin: 0 20px 20px; }
+}

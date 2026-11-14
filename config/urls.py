@@ -12,7 +12,8 @@ urlpatterns = [
     path('', include('main.urls')),
     path('abitur/', include('abitur_page.urls')),
     path('proftests/', include('proftests.urls')),
-    
+    path('events/', include('events.urls')),
+
 ]
 
 if settings.DEBUG:
