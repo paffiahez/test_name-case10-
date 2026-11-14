@@ -31,6 +31,9 @@
 {% endblock %}
 
 {% block content %}
+<!-- Скрытый блок с данными для JavaScript -->
+<div id="events-data" data-events="{{ events_json|escape }}" style="display: none;"></div>
+
 <div class="container" style="padding: 30px 0;">
     <h1 style="text-align: center; color: #8b0000; margin: 0 0 10px;">Календарь мероприятий</h1>
     <div style="text-align: center; color: #666; margin-bottom: 30px;">Выберите интересующее вас событие, чтобы узнать подробности</div>
@@ -76,8 +79,8 @@
 
 {% block extra_js %}
 <script>
-    // Данные передаются из Django (views.py) в виде JSON
-    const eventsData = {{ events_json|safe }};
+    // Читаем данные из data-атрибута (VS Code больше не будет ругаться)
+    const eventsData = JSON.parse(document.getElementById('events-data').dataset.events);
 
     const programList = document.getElementById('programList');
     const detailsContainer = document.getElementById('detailsContainer');
@@ -96,7 +99,12 @@
         programList.innerHTML = '';
         detailsContainer.innerHTML = '';
 
-        if (eventsData.length === 0) { noResults.classList.add('show'); return; } else { noResults.classList.remove('show'); }
+        if (!eventsData || eventsData.length === 0) { 
+            noResults.classList.add('show'); 
+            return; 
+        } else { 
+            noResults.classList.remove('show'); 
+        }
 
         const formatFilter = filterFormatSelect.value;
         const typeFilter = filterTypeSelect.value;
@@ -109,12 +117,17 @@
             return matchFormat && matchType && matchOrg;
         });
 
-        if (filteredEvents.length === 0) { noResults.classList.add('show'); return; }
+        if (filteredEvents.length === 0) { 
+            noResults.classList.add('show'); 
+            return; 
+        }
 
         filteredEvents.forEach((event, index) => {
             const li = document.createElement('li');
             li.textContent = event.title;
             if (index === 0) li.classList.add('active');
+            
+            // Клик по названию мероприятия
             li.addEventListener('click', function() {
                 document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
                 this.classList.add('active');
@@ -123,11 +136,17 @@
             });
             programList.appendChild(li);
 
+            // Создаем карточку с деталями
             const card = document.createElement('div');
             card.className = `detail-card ${index === 0 ? 'active' : ''}`;
             card.id = `card-${event.id}`;
-            const dateObj = new Date(event.date);
-            const formattedDate = dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+            
+            // Форматируем дату (если она в формате YYYY-MM-DD)
+            let formattedDate = event.date;
+            try {
+                const dateObj = new Date(event.date);
+                formattedDate = dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+            } catch (e) {}
 
             card.innerHTML = `
                 <h2>${event.title}</h2>
@@ -135,17 +154,20 @@
                 <div class="info-row"><span class="info-label">Дата проведения:</span><span class="info-value">${formattedDate}</span></div>
                 <div class="info-row"><span class="info-label">Тип мероприятия:</span><span class="info-value">${event.type}</span></div>
                 <div class="info-row"><span class="info-label">Форма проведения:</span><span class="info-value highlight">${event.format}</span></div>
-                <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">${event.time}</span></div>
+                <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">${event.time || '—'}</span></div>
                 <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
-                <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc}</span></div>
+                <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc || '—'}</span></div>
             `;
             detailsContainer.appendChild(card);
         });
     }
 
+    // Слушатели для фильтров
     filterFormatSelect.addEventListener('change', renderSite);
     filterTypeSelect.addEventListener('change', renderSite);
     filterOrgSelect.addEventListener('change', renderSite);
+    
+    // Первый рендер
     renderSite();
 </script>
 {% endblock %}
