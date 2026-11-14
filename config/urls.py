@@ -9,8 +9,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main.urls')),          # главная страница
-    path('abitur/', include('abitur_page.urls')),  # раздел абитуриента
+    path('', include('main.urls')),
+    path('abitur/', include('abitur_page.urls')),
+    path('proftests/', include('proftests.urls')),
+    
 ]
 
 if settings.DEBUG:
