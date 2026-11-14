@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "main",
     "abitur_page",
     "proftests",
+    "events",
 ]
 
 MIDDLEWARE = [
