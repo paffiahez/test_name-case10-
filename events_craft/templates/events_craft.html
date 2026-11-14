@@ -63,7 +63,7 @@
 <div class="container">
     <div class="header">
         <h1>Панель управления</h1>
-        <a href="/events/" class="back-link">← Вернуться к списку мероприятий</a>
+        <a href="/events_jober/" class="back-link">← Вернуться к списку мероприятий</a>
     </div>
 
     <div class="content">
@@ -86,19 +86,28 @@
                     <div style="flex: 1;"><label for="eventFormat">Формат</label><select id="eventFormat" required><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
                 </div>
 
-                <!-- НОВОЕ ПОЛЕ: ТИП МЕРОПРИЯТИЯ -->
                 <div class="form-group">
                     <label for="eventType">Тип мероприятия</label>
                     <select id="eventType" required>
                         <option value="Лекция">Лекция</option>
                         <option value="Экскурсия">Экскурсия</option>
                         <option value="Олимпиада">Олимпиада</option>
+                        <option value="Мастер-класс">Мастер-класс</option>
+                    </select>
+                </div>
+
+                <!-- НОВОЕ ПОЛЕ: КАТЕГОРИЯ ОРГАНИЗАТОРА -->
+                <div class="form-group">
+                    <label for="eventOrgType">Кто проводит мероприятие</label>
+                    <select id="eventOrgType" required>
+                        <option value="uni">От вуза</option>
+                        <option value="employer">От работодателя</option>
                     </select>
                 </div>
 
                 <div class="form-group" style="display: flex; gap: 15px;">
                     <div style="flex: 1;"><label for="eventTime">Длительность</label><input type="text" id="eventTime" required placeholder="2 ч. 30 мин."></div>
-                    <div style="flex: 1;"><label for="eventOrg">Организатор</label><input type="text" id="eventOrg" required placeholder="Приемная комиссия"></div>
+                    <div style="flex: 1;"><label for="eventOrg">Название организации</label><input type="text" id="eventOrg" required placeholder="Приемная комиссия / ООО Ромашка"></div>
                 </div>
 
                 <div class="form-group">
@@ -143,10 +152,14 @@
         eventsData.forEach(event => {
             const card = document.createElement('div');
             card.className = 'admin-card';
+            
+            // Для старых записей, где нет orgType, показываем пустую строку или "Не указан"
+            const orgTypeLabel = event.orgType === 'uni' ? 'От вуза' : (event.orgType === 'employer' ? 'От работодателя' : 'Не указан');
+
             card.innerHTML = `
                 <div class="admin-card-info">
                     <h3>${event.title}</h3>
-                    <p><span>${new Date(event.date).toLocaleDateString('ru-RU')}</span><span>${event.format}</span><span>${event.type}</span><span>${event.org}</span></p>
+                    <p><span>${new Date(event.date).toLocaleDateString('ru-RU')}</span><span>${event.format}</span><span>${event.type}</span><span>${event.org}</span><span>${orgTypeLabel}</span></p>
                 </div>
                 <div class="admin-card-actions">
                     <button class="btn btn-edit" onclick="editEvent(${event.id})">Редактировать</button>
@@ -175,7 +188,8 @@
             title: document.getElementById('eventTitle').value,
             date: document.getElementById('eventDate').value,
             format: document.getElementById('eventFormat').value,
-            type: document.getElementById('eventType').value, // <--- СОХРАНЯЕМ ТИП
+            type: document.getElementById('eventType').value,
+            orgType: document.getElementById('eventOrgType').value, // <--- СОХРАНЯЕМ КАТЕГОРИЮ
             time: document.getElementById('eventTime').value,
             org: document.getElementById('eventOrg').value,
             address: document.getElementById('eventAddress').value || '—',
@@ -199,7 +213,8 @@
         document.getElementById('eventTitle').value = event.title;
         document.getElementById('eventDate').value = event.date;
         document.getElementById('eventFormat').value = event.format;
-        document.getElementById('eventType').value = event.type; // <--- ЗАПОЛНЯЕМ ТИП ПРИ РЕДАКТИРОВАНИИ
+        document.getElementById('eventType').value = event.type;
+        document.getElementById('eventOrgType').value = event.orgType || 'uni'; // <--- ЗАПОЛНЯЕМ КАТЕГОРИЮ
         document.getElementById('eventTime').value = event.time;
         document.getElementById('eventOrg').value = event.org;
         document.getElementById('eventAddress').value = event.address === '—' ? '' : event.address;
