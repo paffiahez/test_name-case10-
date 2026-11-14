@@ -1,0 +1,66 @@
+{
+    "users": {
+        "student1": {
+            "password": "123",
+            "role": "student",
+            "name": "Иванов Иван",
+            "profile": {
+                "fio": "Иванов Иван Иванович",
+                "phone": "+7 (999) 111-22-33",
+                "skills": "Python, C++, базы данных",
+                "experience": "Проходил практику в IT-отделе ТулГУ",
+                "olympiads": "Призер олимпиады 'Я — профессионал'"
+            },
+            "mentor_id": "mentor1"
+        },
+        "student2": {
+            "password": "123",
+            "role": "student",
+            "name": "Петрова Анна",
+            "profile": {
+                "fio": "Петрова Анна Сергеевна",
+                "phone": "+7 (999) 444-55-66",
+                "skills": "Java, Spring Boot, SQL",
+                "experience": "Нет опыта работы",
+                "olympiads": "Участник хакатона 'Цифровой прорыв'"
+            },
+            "mentor_id": null
+        },
+        "mentor1": {
+            "password": "123",
+            "role": "mentor",
+            "name": "Сидоров Алексей (Наставник)",
+            "company": "АО «НПО «Сплав»",
+            "position": "Ведущий инженер-программист"
+        },
+        "employer1": {
+            "password": "123",
+            "role": "employer",
+            "name": "ООО «Туламашзавод» (Работодатель)"
+        }
+    },
+    "chats": {
+        "student1_mentor1": [
+            {
+                "sender": "mentor1",
+                "text": "Привет, Иван! Как дела с курсовой?",
+                "time": "10:00"
+            },
+            {
+                "sender": "student1",
+                "text": "Здравствуйте! Пишу потихоньку, есть пара вопросов по архитектуре.",
+                "time": "10:05"
+            },
+            {
+                "sender": "mentor1",
+                "text": "Давай созвонимся завтра в 15:00, обсудим.",
+                "time": "10:10"
+            },
+            {
+                "sender": "student1",
+                "text": "привет",
+                "time": "15:25"
+            }
+        ]
+    }
+}

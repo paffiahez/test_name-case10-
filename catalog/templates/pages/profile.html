@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет — ТулГУ</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fcfcfc; color: #333; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 100vh; }
+        
+        .site-header { width: 100%; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
+        .header-container { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo { font-size: 20px; font-weight: 800; color: #8b0000; text-decoration: none; letter-spacing: -0.5px; }
+        .header-right-group { display: flex; align-items: center; gap: 20px; }
+        .nav-menu { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; }
+        .nav-menu a { text-decoration: none; color: #555; font-weight: 500; font-size: 14px; transition: color 0.3s ease; }
+        .nav-menu a:hover { color: #8b0000; }
+        .logout-btn { color: #8b0000; text-decoration: none; font-weight: bold; font-size: 14px; border: 1px solid #8b0000; padding: 5px 10px; border-radius: 4px; transition: all 0.3s; }
+        .logout-btn:hover { background-color: #8b0000; color: white; }
+
+        .main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; flex: 1; align-items: flex-start; }
+        
+        /* Сетка: слева анкета, справа наставник и чат */
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1200px; width: 100%; }
+        @media (max-width: 900px) { .grid-container { grid-template-columns: 1fr; } }
+
+        .panel { background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow: hidden; border-top: 5px solid #8b0000; padding: 30px; }
+        h2 { color: #8b0000; margin-top: 0; font-size: 22px; border-bottom: 2px solid #8b0000; padding-bottom: 10px; margin-bottom: 20px; }
+
+        /* Форма анкеты */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #555; font-weight: 500; font-size: 14px; }
+        .input-group input, .input-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-family: inherit; }
+        .input-group input:focus, .input-group textarea:focus { outline: none; border-color: #8b0000; }
+        .btn-save { padding: 12px 25px; background-color: #8b0000; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background 0.3s; width: 100%; }
+        .btn-save:hover { background-color: #a51c1c; }
+
+        /* Блок наставника */
+        .mentor-card { background: #fafafa; border-left: 4px solid #8b0000; padding: 20px; border-radius: 6px; margin-bottom: 25px; }
+        .mentor-card p { margin: 5px 0; color: #444; }
+        .no-mentor { color: #777; font-style: italic; padding: 15px; background: #f5f5f5; border-radius: 6px; }
+
+        /* ЧАТ */
+        .chat-container { display: flex; flex-direction: column; height: 400px; border: 1px solid #eee; border-radius: 8px; overflow: hidden; background: #fff; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #f9f9f9; }
+        
+        .message { max-width: 80%; padding: 10px 15px; border-radius: 12px; font-size: 14px; line-height: 1.4; position: relative; }
+        .message .time { font-size: 10px; color: #888; margin-top: 4px; display: block; text-align: right; }
+        
+        /* Мои сообщения (отправленные студентом) */
+        .message.my-message { align-self: flex-end; background-color: #8b0000; color: white; border-bottom-right-radius: 2px; }
+        .message.my-message .time { color: #ddd; }
+        
+        /* Сообщения наставника */
+        .message.mentor-message { align-self: flex-start; background-color: #fff; border: 1px solid #ddd; border-bottom-left-radius: 2px; }
+
+        .chat-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #eee; }
+        .chat-input-area input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-right: 10px; font-size: 14px; }
+        .chat-input-area input:focus { outline: none; border-color: #8b0000; }
+        .chat-input-area button { padding: 12px 20px; background-color: #8b0000; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        .chat-input-area button:hover { background-color: #a51c1c; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="logo">ТулГУ | Целевое</a>
+            <div class="header-right-group">
+                <ul class="nav-menu">
+                    <li><a href="/about/">О нас</a></li>
+                    <li><a href="/contacts/">Контакты</a></li>
+                </ul>
+                <a href="{% url 'logout' %}" class="logout-btn">Выйти</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="grid-container">
+            
+            <!-- ЛЕВАЯ КОЛОНКА: Анкета -->
+            <div class="panel">
+                <h2>Моя анкета</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label>ФИО</label>
+                        <input type="text" name="fio" value="{{ profile.fio|default:'' }}" placeholder="Иванов Иван Иванович">
+                    </div>
+                    <div class="input-group">
+                        <label>Телефон</label>
+                        <input type="tel" name="phone" value="{{ profile.phone|default:'' }}" placeholder="+7 (999) 123-45-67">
+                    </div>
+                    <div class="input-group">
+                        <label>Навыки</label>
+                        <input type="text" name="skills" value="{{ profile.skills|default:'' }}" placeholder="Python, AutoCAD...">
+                    </div>
+                    <div class="input-group">
+                        <label>Опыт работы</label>
+                        <textarea name="experience" rows="3">{{ profile.experience|default:'' }}</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Олимпиады</label>
+                        <textarea name="olympiads" rows="3">{{ profile.olympiads|default:'' }}</textarea>
+                    </div>
+                    <button type="submit" name="save_profile" class="btn-save">Сохранить анкету</button>
+                </form>
+            </div>
+
+            <!-- ПРАВАЯ КОЛОНКА: Наставник + Чат -->
+            <div class="panel">
+                <h2>Мой наставник</h2>
+                
+                {% if mentor %}
+                    <div class="mentor-card">
+                        <p><strong>Имя:</strong> {{ mentor.name }}</p>
+                        <p><strong>Компания:</strong> {{ mentor.company }}</p>
+                        <p><strong>Должность:</strong> {{ mentor.position }}</p>
+                    </div>
+
+                    <!-- ЧАТ -->
+                    <h2 style="margin-top: 30px;">Чат с наставником</h2>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            {% for msg in chat_messages %}
+                                <div class="message {% if msg.sender == username %}my-message{% else %}mentor-message{% endif %}">
+                                    {{ msg.text }}
+                                    <span class="time">{{ msg.time }}</span>
+                                </div>
+                            {% empty %}
+                                <p style="text-align: center; color: #999; margin-top: 20px;">Сообщений пока нет. Напишите первым!</p>
+                            {% endfor %}
+                        </div>
+                        <form method="POST" action="{% url 'send_message' %}" class="chat-input-area">
+                            {% csrf_token %}
+                            <input type="hidden" name="mentor_id" value="{{ mentor_id }}">
+                            <input type="text" name="message" placeholder="Напишите сообщение..." required autocomplete="off">
+                            <button type="submit">Отправить</button>
+                        </form>
+                    </div>
+
+                    <script>
+                        // Автоскролл чата вниз при загрузке страницы
+                        const chatBox = document.getElementById('chatMessages');
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    </script>
+
+                {% else %}
+                    <div class="no-mentor">
+                        У вас пока нет наставника. Как только вы заключите целевой договор, информация о вашем наставнике появится здесь.
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

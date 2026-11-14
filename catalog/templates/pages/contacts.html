@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты — ТулГУ</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcfcfc;
+            color: #333;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
+            overflow-x: hidden; width: 100%;
+        }
+        /* Шапка */
+        .site-header { width: 100%; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
+        .header-container { max-width: 1000px; margin: 0 auto; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo { font-size: 20px; font-weight: 800; color: #8b0000; text-decoration: none; letter-spacing: -0.5px; }
+        .header-right-group { display: flex; align-items: center; gap: 30px; }
+        .nav-menu { display: flex; gap: 25px; list-style: none; margin: 0; padding: 0; }
+        .nav-menu a { text-decoration: none; color: #555; font-weight: 500; font-size: 14px; transition: color 0.3s ease; position: relative; }
+        .nav-menu a:hover { color: #8b0000; }
+        .nav-menu a.active { color: #8b0000; font-weight: bold; }
+        .nav-menu a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background-color: #8b0000; transition: width 0.3s ease; }
+        .nav-menu a:hover::after { width: 100%; }
+        .profile-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background-color: #f4f4f4; border-radius: 50%; text-decoration: none; transition: all 0.3s ease; border: 1px solid #ddd; flex-shrink: 0; }
+        .profile-icon:hover { background-color: #8b0000; border-color: #8b0000; }
+        .profile-icon svg { width: 18px; height: 18px; fill: #555; transition: fill 0.3s ease; }
+        .profile-icon:hover svg { fill: white; }
+
+        /* Контент */
+        .main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; }
+        .container { max-width: 1000px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; border-top: 5px solid #8b0000; padding: 40px; }
+        h1 { color: #8b0000; margin-top: 0; font-size: 28px; border-bottom: 2px solid #8b0000; padding-bottom: 15px; }
+        
+        .contact-card {
+            background: #fafafa;
+            border-left: 4px solid #8b0000;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+        .contact-card h3 { margin-top: 0; color: #333; font-size: 18px; }
+        .contact-card p { margin: 5px 0; color: #555; line-height: 1.5; }
+        .contact-card a { color: #8b0000; text-decoration: none; font-weight: bold; }
+        .contact-card a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="logo">ТулГУ | Целевое</a>
+            <div class="header-right-group">
+                <ul class="nav-menu">
+                    <li><a href="/about/">О нас</a></li>
+                    <li><a href="/contacts/" class="active">Контакты</a></li>
+                </ul>
+                <a href="/login/" class="profile-icon" title="Личный кабинет"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <h1>Наши контакты</h1>
+            <p>Если у вас остались вопросы по целевому обучению, вы всегда можете обратиться в приемную комиссию или к нашим координаторам.</p>
+            
+            <div class="contact-card">
+                <h3>Приемная комиссия ТулГУ</h3>
+                <p>Адрес: 300012, г. Тула, пр. Ленина, д. 92 (Главный корпус)</p>
+                <p>Телефон: <a href="tel:+74872223335">+7 (4872) 22-33-35</a></p>
+                <p>Email: <a href="mailto:priem@tsu.tula.ru">priem@tsu.tula.ru</a></p>
+            </div>
+
+            <div class="contact-card">
+                <h3>Центр карьеры ТулГУ (по вопросам целевых договоров)</h3>
+                <p>Телефон: <a href="tel:+74872223350">+7 (4872) 22-33-50</a></p>
+                <p>Email: <a href="mailto:career@tsu.tula.ru">career@tsu.tula.ru</a></p>
+            </div>
+            
+            <div class="contact-card">
+                <h3>Поддержка портала</h3>
+                <p>Если вы нашли ошибку на сайте или хотите предложить сотрудничество, пишите:</p>
+                <p>Email: <a href="mailto:info@tulsu-target.ru">info@tulsu-target.ru</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
