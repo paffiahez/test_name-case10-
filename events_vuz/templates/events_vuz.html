@@ -148,7 +148,9 @@
     } else {
         eventsData = defaultEvents;
         localStorage.setItem('tulgu_events', JSON.stringify(eventsData));
-    }    let requestsData = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
+    }
+
+    let requestsData = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
 
     const programList = document.getElementById('programList');
     const detailsContainer = document.getElementById('detailsContainer');
@@ -205,25 +207,36 @@
             id: Date.now()
         }; 
 
+        // Добавляем в общий список мероприятий
         eventsData.push(newEvent);
         localStorage.setItem('tulgu_events', JSON.stringify(eventsData));
 
+        // Меняем статус заявки
         requests[reqIndex].status = 'accepted';
         localStorage.setItem('tulgu_requests', JSON.stringify(requests));
-        
+
+        // Обновляем локальную переменную, чтобы уведомление исчезло
+        requestsData = requests;
+
         renderNotifications();
         renderSite();
         alert('Мероприятие добавлено в список!');
     };
 
+    // Функция отклонения заявки
     window.rejectRequest = (id) => {
         let requests = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
         const idx = requests.findIndex(r => r.id === id);
-        if (idx !== -1) {
-            requests[idx].status = 'rejected';
-            localStorage.setItem('tulgu_requests', JSON.stringify(requests));
-            renderNotifications();
-        }
+        if (idx === -1) return;
+
+        // Меняем статус
+        requests[idx].status = 'rejected';
+        localStorage.setItem('tulgu_requests', JSON.stringify(requests));
+
+        // Обновляем локальную переменную
+        requestsData = requests;
+
+        renderNotifications();
     };
 
     function getOrgType(event) { return event.orgType || 'uni'; }
