@@ -297,3 +297,9 @@ a {
     .notifications-panel { margin: 0 20px 20px; }
     .form-row { flex-direction: column; }
 }
+
+/* ==================== Новое ==================== */
+.tile__text { text-align: center; }
+.tile__title { border-bottom: 1px solid rgba(255,255,255,0.6); display: inline-block; padding-bottom: 6px; }
+.tile__subtitle { color: rgba(255,255,255,0.85); font-size: 13px; font-weight: normal; margin-top: 6px; }
+.tile svg { align-self: flex-start; height: 28px; margin-right: 8px; width: 28px; }
