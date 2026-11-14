@@ -1,7 +1,41 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-
 from .models import Event, EventRequest
+from django.contrib.admin.views.decorators import staff_member_required
+
+
+@staff_member_required
+def uni_events(request):
+    context = _calendar_context(request)
+    context['requests'] = EventRequest.objects.filter(
+        status=EventRequest.Status.PENDING
+    )
+    return render(request, 'events/uni_events.html', context)
+
+
+@staff_member_required
+def handle_request(request, pk, action):
+    req = get_object_or_404(EventRequest, pk=pk)
+
+    if request.method == 'POST':
+        if action == 'accept':
+            Event.objects.create(
+                title=req.title,
+                event_type=req.event_type,
+                format=req.format,
+                date=req.date,
+                duration=req.duration,
+                organizer=req.organization,
+                org_type=Event.OrgType.EMPLOYER,
+                address=req.address,
+                description=req.description,
+            )
+            req.status = EventRequest.Status.APPROVED
+        elif action == 'reject':
+            req.status = EventRequest.Status.REJECTED
+        req.save()
+
+    return redirect('uni_events')
 
 
 def _calendar_context(request):
