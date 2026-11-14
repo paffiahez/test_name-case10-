@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление мероприятиями — ТулГУ</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fcfcfc; color: #333; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 100vh; }
+        
+        .site-header { width: 100%; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
+        .header-container { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo { font-size: 20px; font-weight: 800; color: #8b0000; text-decoration: none; letter-spacing: -0.5px; }
+        .header-right-group { display: flex; align-items: center; gap: 20px; }
+        .logout-btn { color: #8b0000; text-decoration: none; font-weight: bold; font-size: 14px; border: 1px solid #8b0000; padding: 5px 10px; border-radius: 4px; transition: all 0.3s; }
+        .logout-btn:hover { background-color: #8b0000; color: white; }
+
+        .main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; flex: 1; align-items: flex-start; }
+        .container { max-width: 1000px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow: hidden; border-top: 5px solid #8b0000; padding: 30px; }
+        
+        h1 { color: #8b0000; margin-top: 0; font-size: 26px; border-bottom: 2px solid #8b0000; padding-bottom: 15px; margin-bottom: 25px; }
+        h2 { color: #333; font-size: 20px; margin-bottom: 15px; }
+
+        .panel { background: #fafafa; border: 1px solid #eee; border-left: 4px solid #8b0000; padding: 20px; margin-bottom: 30px; border-radius: 8px; }
+        .request-item { background: white; border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-accept { padding: 8px 15px; background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        .btn-accept:hover { background: #bbdefb; }
+        .event-card { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .event-card:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="logo">ТулГУ | Целевое</a>
+            <div class="header-right-group">
+                <a href="/about/">О нас</a>
+                <a href="/contacts/">Контакты</a>
+                <a href="{% url 'logout' %}" class="logout-btn">Выйти</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <h1>Управление мероприятиями</h1>
+            <p style="color: #666; margin-bottom: 20px;">Вы вошли как: <strong>{{ username }}</strong> (Сотрудник вуза)</p>
+
+            <div class="panel">
+                <h2>Заявки от работодателей ({{ requests|length }})</h2>
+                {% for req in requests %}
+                    <div class="request-item">
+                        <div>
+                            <strong>{{ req.eventData.title }}</strong><br>
+                            <small style="color: #777;">От: {{ req.eventData.org }} | Дата: {{ req.eventData.date }}</small>
+                        </div>
+                        <form method="POST" style="margin: 0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="request_id" value="{{ req.id }}">
+                            <button type="submit" name="accept_request" class="btn-accept">Одобрить и добавить</button>
+                        </form>
+                    </div>
+                {% empty %}
+                    <p style="color: #999; font-style: italic;">Новых заявок нет.</p>
+                {% endfor %}
+            </div>
+
+            <div class="panel" style="background: white; border-left-color: #ddd;">
+                <h2>Все мероприятия</h2>
+                {% for event in events %}
+                    <div class="event-card">
+                        <strong>{{ event.title }}</strong> <span style="color: #8b0000; font-weight: bold; margin-left: 10px;">{{ event.date }}</span><br>
+                        <span style="color: #666; font-size: 14px;">Организатор: {{ event.org }} | Формат: {{ event.format }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

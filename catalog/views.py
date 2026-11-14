@@ -2,13 +2,12 @@ from django.shortcuts import render, redirect
 from .db_handler import load_data, save_data
 from datetime import datetime
 
-# --- ЛОГИН ---
+# --- ЛОГИН / ВЫХОД ---
 def login_view(request):
     error = None
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
-        
         data = load_data()
         users = data.get('users', {})
         
@@ -17,10 +16,13 @@ def login_view(request):
             return redirect('profile')
         else:
             error = "Неверный логин или пароль."
-            
     return render(request, 'pages/login.html', {'error': error})
 
-# --- ЛИЧНЫЙ КАБИНЕТ (Студент) ---
+def logout_view(request):
+    request.session.flush()
+    return redirect('home')
+
+# --- ПРОФИЛЬ (Роутинг по ролям) ---
 def profile_view(request):
     username = request.session.get('user_id')
     if not username:
@@ -28,52 +30,80 @@ def profile_view(request):
 
     data = load_data()
     user_data = data['users'].get(username)
-
     if not user_data:
         return redirect('login')
 
-    # Если это не студент, отправляем его на другие страницы (пока просто заглушка)
-    if user_data.get('role') != 'student':
+    role = user_data.get('role')
+
+    # 1. СТУДЕНТ (твой личный кабинет с чатом)
+    if role == 'student':
+        if request.method == 'POST' and 'save_profile' in request.POST:
+            data['users'][username]['profile'] = {
+                'fio': request.POST.get('fio', ''), 'phone': request.POST.get('phone', ''),
+                'skills': request.POST.get('skills', ''), 'experience': request.POST.get('experience', ''),
+                'olympiads': request.POST.get('olympiads', ''),
+            }
+            save_data(data)
+            return redirect('profile')
+
+        mentor_info = data['users'].get(user_data.get('mentor_id')) if user_data.get('mentor_id') else None
+        chat_messages = data.get('chats', {}).get(f"{username}_{user_data.get('mentor_id')}", []) if user_data.get('mentor_id') else []
+
+        return render(request, 'pages/profile.html', {
+            'username': username, 'profile': user_data.get('profile', {}),
+            'mentor': mentor_info, 'chat_messages': chat_messages, 'mentor_id': user_data.get('mentor_id')
+        })
+
+    # 2. СОТРУДНИК ВУЗА (Управление мероприятиями и заявками)
+    elif role == 'staff':
+        events = data.get('events', [])
+        requests = data.get('requests', [])
+        
+        # Если нажали "Одобрить заявку"
+        if request.method == 'POST' and 'accept_request' in request.POST:
+            req_id = int(request.POST.get('request_id'))
+            req = next((r for r in requests if r['id'] == req_id), None)
+            if req:
+                req['status'] = 'accepted'
+                new_event = req['eventData']
+                new_event['id'] = int(datetime.now().timestamp())
+                new_event['orgType'] = 'employer'
+                events.append(new_event)
+                save_data(data)
+            return redirect('profile')
+            
+        return render(request, 'pages/events_vuz.html', {'username': username, 'events': events, 'requests': [r for r in requests if r['status'] == 'pending']})
+
+    # 3. РАБОТОДАТЕЛЬ (Просмотр + Оставить заявку)
+    elif role == 'employer':
+        events = data.get('events', [])
+        if request.method == 'POST' and 'create_request' in request.POST:
+            new_req = {
+                "id": int(datetime.now().timestamp()),
+                "dateSubmitted": datetime.now().strftime("%d.%m.%Y %H:%M"),
+                "status": "pending",
+                "eventData": {
+                    "title": request.POST.get('title'), "date": request.POST.get('date'),
+                    "format": request.POST.get('format'), "type": request.POST.get('type'),
+                    "time": request.POST.get('time'), "org": request.POST.get('org'),
+                    "orgType": "employer", "address": request.POST.get('address'), "desc": request.POST.get('desc')
+                }
+            }
+            data.setdefault('requests', []).append(new_req)
+            save_data(data)
+            return redirect('profile')
+
+        return render(request, 'pages/events_jober.html', {'username': username, 'events': events})
+
+    # 4. НАСТАВНИК (Заглушка)
+    else:
         return render(request, 'pages/not_student.html', {'user': user_data})
 
-    # Если студент: обрабатываем сохранение анкеты
-    if request.method == 'POST' and 'save_profile' in request.POST:
-        data['users'][username]['profile'] = {
-            'fio': request.POST.get('fio', ''),
-            'phone': request.POST.get('phone', ''),
-            'skills': request.POST.get('skills', ''),
-            'experience': request.POST.get('experience', ''),
-            'olympiads': request.POST.get('olympiads', ''),
-        }
-        save_data(data)
-        return redirect('profile')
-
-    # Ищем наставника, если он прикреплен
-    mentor_info = None
-    mentor_id = user_data.get('mentor_id')
-    if mentor_id:
-        mentor_info = data['users'].get(mentor_id)
-
-    # Берем историю чата с наставником
-    chat_messages = []
-    if mentor_id:
-        chat_key = f"{username}_{mentor_id}"
-        chat_messages = data.get('chats', {}).get(chat_key, [])
-
-    return render(request, 'pages/profile.html', {
-        'username': username,
-        'profile': user_data.get('profile', {}),
-        'mentor': mentor_info,
-        'chat_messages': chat_messages,
-        'mentor_id': mentor_id
-    })
-
-# --- ОТПРАВКА СООБЩЕНИЯ В ЧАТ ---
+# --- ОТПРАВКА СООБЩЕНИЯ (ЧАТ) ---
 def send_message(request):
     if request.method == 'POST':
         username = request.session.get('user_id')
-        if not username:
-            return redirect('login')
+        if not username: return redirect('login')
 
         message_text = request.POST.get('message', '').strip()
         mentor_id = request.POST.get('mentor_id')
@@ -81,30 +111,16 @@ def send_message(request):
         if message_text and mentor_id:
             data = load_data()
             chat_key = f"{username}_{mentor_id}"
-            
-            if 'chats' not in data:
-                data['chats'] = {}
-            if chat_key not in data['chats']:
-                data['chats'][chat_key] = []
+            if 'chats' not in data: data['chats'] = {}
+            if chat_key not in data['chats']: data['chats'][chat_key] = []
 
-            # Добавляем сообщение
-            current_time = datetime.now().strftime("%H:%M")
             data['chats'][chat_key].append({
-                "sender": username,
-                "text": message_text,
-                "time": current_time
+                "sender": username, "text": message_text, "time": datetime.now().strftime("%H:%M")
             })
             save_data(data)
-
         return redirect('profile')
 
-def logout_view(request):
-    request.session.flush()
-    return redirect('home')
-
+# --- ОСТАЛЬНЫЕ СТРАНИЦЫ ---
 def home(request): return render(request, 'index.html')
 def about(request): return render(request, 'pages/about.html')
 def contacts(request): return render(request, 'pages/contacts.html')
-def logout_view(request):
-    request.session.flush()
-    return redirect('home')

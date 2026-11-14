@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления | ТулГУ</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fcfcfc; color: #333; margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        .container { max-width: 1200px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; border-top: 5px solid #8b0000; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #eee; background: #fff; }
+        .header h1 { color: #8b0000; margin: 0; font-size: 24px; }
+        .back-link { color: #666; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .back-link:hover { color: #8b0000; }
+
+        .content { padding: 30px 40px; }
+
+        .form-panel { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 25px; margin-bottom: 30px; display: none; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); }
+        .form-panel.active { display: block; animation: fadeIn 0.3s ease; }
+        .form-panel h2 { margin-top: 0; color: #8b0000; font-size: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: bold; color: #555; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; box-sizing: border-box; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #8b0000; outline: none; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s; }
+        .btn-primary { background-color: #8b0000; color: white; }
+        .btn-primary:hover { background-color: #5a0000; }
+        .btn-cancel { background-color: #ccc; color: #333; margin-left: 10px; }
+        .btn-cancel:hover { background-color: #bbb; }
+        .btn-add { background-color: #fff0f0; color: #8b0000; border: 1px solid #8b0000; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 15px; }
+        .btn-add:hover { background-color: #8b0000; color: white; }
+
+        .admin-list { display: flex; flex-direction: column; gap: 15px; }
+        .admin-card { background: white; border: 1px solid #eee; border-left: 4px solid #8b0000; border-radius: 6px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: box-shadow 0.2s; }
+        .admin-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        
+        .admin-card-info h3 { margin: 0 0 6px 0; font-size: 18px; color: #333; }
+        .admin-card-info p { margin: 0; font-size: 13px; color: #777; display: flex; gap: 10px; }
+        .admin-card-info p span { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; }
+
+        .admin-card-actions { display: flex; gap: 10px; }
+        .btn-edit, .btn-delete { padding: 8px 14px; font-size: 13px; border-radius: 5px; }
+        .btn-edit { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+        .btn-edit:hover { background-color: #bbdefb; }
+        .btn-delete { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .btn-delete:hover { background-color: #ffcdd2; }
+
+        .no-items { color: #999; font-style: italic; text-align: center; padding: 30px; background: #fafafa; border-radius: 8px; border: 1px dashed #ddd; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 10px; text-align: center; }
+            .content { padding: 20px; }
+            .admin-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Панель управления</h1>
+        <a href="/events/" class="back-link">← Вернуться к списку мероприятий</a>
+    </div>
+
+    <div class="content">
+        <button class="btn btn-add" id="showFormBtn">
+            <span>+</span> Добавить новое мероприятие
+        </button>
+
+        <div class="form-panel" id="formPanel">
+            <h2 id="formTitle">Добавление мероприятия</h2>
+            <form id="eventForm">
+                <input type="hidden" id="eventId" value="">
+                
+                <div class="form-group">
+                    <label for="eventTitle">Название мероприятия</label>
+                    <input type="text" id="eventTitle" required placeholder="Например: День открытых дверей">
+                </div>
+                
+                <div class="form-group" style="display: flex; gap: 15px;">
+                    <div style="flex: 1;"><label for="eventDate">Дата</label><input type="date" id="eventDate" required></div>
+                    <div style="flex: 1;"><label for="eventFormat">Формат</label><select id="eventFormat" required><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventType">Тип мероприятия</label>
+                    <select id="eventType" required>
+                        <option value="Лекция">Лекция</option>
+                        <option value="Экскурсия">Экскурсия</option>
+                        <option value="Олимпиада">Олимпиада</option>
+                        <option value="Мастер-класс">Мастер-класс</option>
+                    </select>
+                </div>
+
+                <!-- НОВОЕ ПОЛЕ: КАТЕГОРИЯ ОРГАНИЗАТОРА -->
+                <div class="form-group">
+                    <label for="eventOrgType">Кто проводит мероприятие</label>
+                    <select id="eventOrgType" required>
+                        <option value="uni">От вуза</option>
+                        <option value="employer">От работодателя</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="display: flex; gap: 15px;">
+                    <div style="flex: 1;"><label for="eventTime">Длительность</label><input type="text" id="eventTime" required placeholder="2 ч. 30 мин."></div>
+                    <div style="flex: 1;"><label for="eventOrg">Название организации</label><input type="text" id="eventOrg" required placeholder="Приемная комиссия / ООО Ромашка"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventAddress">Адрес (если онлайн - пусто)</label>
+                    <input type="text" id="eventAddress" placeholder="г. Тула, пр. Ленина, д. 92">
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDesc">Описание</label>
+                    <textarea id="eventDesc" rows="4" required placeholder="Подробности..."></textarea>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-cancel" id="cancelBtn">Отмена</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="admin-list" id="adminList"></div>
+    </div>
+</div>
+
+<script>
+    let eventsData = JSON.parse(localStorage.getItem('tulgu_events')) || [];
+    const adminList = document.getElementById('adminList');
+    const formPanel = document.getElementById('formPanel');
+    const eventForm = document.getElementById('eventForm');
+    const showFormBtn = document.getElementById('showFormBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const formTitle = document.getElementById('formTitle');
+
+    function saveData() { localStorage.setItem('tulgu_events', JSON.stringify(eventsData)); }
+
+    function renderList() {
+        adminList.innerHTML = '';
+        if (eventsData.length === 0) {
+            adminList.innerHTML = '<div class="no-items">Мероприятий пока нет.</div>';
+            return;
+        }
+        eventsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        eventsData.forEach(event => {
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            
+            // Для старых записей, где нет orgType, показываем пустую строку или "Не указан"
+            const orgTypeLabel = event.orgType === 'uni' ? 'От вуза' : (event.orgType === 'employer' ? 'От работодателя' : 'Не указан');
+
+            card.innerHTML = `
+                <div class="admin-card-info">
+                    <h3>${event.title}</h3>
+                    <p><span>${new Date(event.date).toLocaleDateString('ru-RU')}</span><span>${event.format}</span><span>${event.type}</span><span>${event.org}</span><span>${orgTypeLabel}</span></p>
+                </div>
+                <div class="admin-card-actions">
+                    <button class="btn btn-edit" onclick="editEvent(${event.id})">Редактировать</button>
+                    <button class="btn btn-delete" onclick="deleteEvent(${event.id})">Удалить</button>
+                </div>
+            `;
+            adminList.appendChild(card);
+        });
+    }
+
+    showFormBtn.addEventListener('click', () => {
+        formPanel.classList.add('active');
+        eventForm.reset();
+        document.getElementById('eventId').value = '';
+        formTitle.textContent = 'Добавление мероприятия';
+        formPanel.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    cancelBtn.addEventListener('click', () => { formPanel.classList.remove('active'); });
+
+    eventForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('eventId').value;
+        const newEvent = {
+            id: id ? parseInt(id) : Date.now(),
+            title: document.getElementById('eventTitle').value,
+            date: document.getElementById('eventDate').value,
+            format: document.getElementById('eventFormat').value,
+            type: document.getElementById('eventType').value,
+            orgType: document.getElementById('eventOrgType').value, // <--- СОХРАНЯЕМ КАТЕГОРИЮ
+            time: document.getElementById('eventTime').value,
+            org: document.getElementById('eventOrg').value,
+            address: document.getElementById('eventAddress').value || '—',
+            desc: document.getElementById('eventDesc').value
+        };
+        if (id) {
+            const index = eventsData.findIndex(ev => ev.id === parseInt(id));
+            eventsData[index] = newEvent;
+        } else {
+            eventsData.push(newEvent);
+        }
+        saveData(); renderList(); formPanel.classList.remove('active');
+    });
+
+    window.editEvent = function(id) {
+        const event = eventsData.find(ev => ev.id === id);
+        if (!event) return;
+        formPanel.classList.add('active');
+        formTitle.textContent = 'Редактирование мероприятия';
+        document.getElementById('eventId').value = event.id;
+        document.getElementById('eventTitle').value = event.title;
+        document.getElementById('eventDate').value = event.date;
+        document.getElementById('eventFormat').value = event.format;
+        document.getElementById('eventType').value = event.type;
+        document.getElementById('eventOrgType').value = event.orgType || 'uni'; // <--- ЗАПОЛНЯЕМ КАТЕГОРИЮ
+        document.getElementById('eventTime').value = event.time;
+        document.getElementById('eventOrg').value = event.org;
+        document.getElementById('eventAddress').value = event.address === '—' ? '' : event.address;
+        document.getElementById('eventDesc').value = event.desc;
+        formPanel.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.deleteEvent = function(id) {
+        if (confirm('Удалить?')) {
+            eventsData = eventsData.filter(ev => ev.id !== id);
+            saveData(); renderList();
+        }
+    };
+
+    renderList();
+</script>
+
+</body>
+</html>

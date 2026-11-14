@@ -1,4 +1,5 @@
 from django.db import models
+<<<<<<< HEAD
 from django.utils.text import slugify
 
 
@@ -27,3 +28,7 @@ class Offer(models.Model):
 
     def __str__(self):
         return f"{self.code} {self.title} — {self.employer}"
+=======
+
+# Create your models here.
+>>>>>>> origin/branch-nastya
