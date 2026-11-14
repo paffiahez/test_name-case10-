@@ -9,15 +9,15 @@
 </head>
 <body>
 
-    <!-- Верхняя серая полоса -->
+    <!-- Верхняя серая полоса (Plate) -->
     <header class="top-bar">
+        {% block header_content %}
         <nav class="top-menu">
-            <a href="{% url 'test_list' %}" class="top-btn">Тесты</a>
-
             <a href="#" class="top-btn">Кнопка 1</a>
             <a href="#" class="top-btn">Кнопка 2</a>
-            <a href="#" class="top-btn">Кнопка 3</a>
+                <a href="#" class="top-btn">Кнопка 3</a>
         </nav>
+        {% endblock %}
     </header>
 
     <!-- Контент -->
