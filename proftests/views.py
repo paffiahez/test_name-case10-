@@ -1,13 +1,13 @@
 from collections import Counter
-from .models import AnswerOption, StudyDirection
-from collections import Counter
+
 from django.shortcuts import get_object_or_404, render
+
 from .models import AnswerOption, Test
 
 
 def test_list(request):
     tests = Test.objects.filter(is_active=True)
-    return render(request, 'abitur_page/test_list.html', {'tests': tests})
+    return render(request, 'proftests/test_list.html', {'tests': tests})
 
 
 def test_detail(request, slug):
@@ -16,7 +16,6 @@ def test_detail(request, slug):
 
     result = None
     if request.method == 'POST':
-        # собираем выбранные варианты по каждому вопросу
         option_ids = []
         for question in questions:
             value = request.POST.get(f'q{question.id}')
@@ -42,17 +41,8 @@ def test_detail(request, slug):
             for direction, score in top
         ]
 
-    return render(request, 'abitur_page/test_detail.html', {
+    return render(request, 'proftests/test_detail.html', {
         'test': test,
         'questions': questions,
         'result': result,
     })
-
-def calculate_result(answers):
-    """answers: словарь {question_id: option_id} из формы."""
-    scores = Counter()
-    for option_id in answers.values():
-        for s in AnswerOption.objects.filter(option_id=option_id).select_related('direction'):
-            scores[s.direction] += s.weight
-    # отсортированный список направлений от лучшего к худшему
-    return sorted(scores.items(), key=lambda pair: pair[1], reverse=True)
