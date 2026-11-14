@@ -34,3 +34,30 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+class EventRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'На рассмотрении'
+        APPROVED = 'approved', 'Одобрена'
+        REJECTED = 'rejected', 'Отклонена'
+
+    title = models.CharField('Название мероприятия', max_length=200)
+    event_type = models.CharField('Тип', max_length=20,
+                                  choices=Event.EventType.choices)
+    format = models.CharField('Формат', max_length=10,
+                              choices=Event.Format.choices)
+    date = models.DateField('Дата')
+    duration = models.CharField('Длительность', max_length=50)
+    organization = models.CharField('Организация', max_length=200)
+    address = models.CharField('Адрес', max_length=300, blank=True, default='—')
+    description = models.TextField('Описание')
+    status = models.CharField('Статус', max_length=10,
+                              choices=Status.choices, default=Status.PENDING)
+    created_at = models.DateTimeField('Отправлена', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Заявка на мероприятие'
+        verbose_name_plural = 'Заявки на мероприятия'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.title} ({self.organization})'
