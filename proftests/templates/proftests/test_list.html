@@ -1,0 +1,20 @@
+{% extends 'abitur_page/base.html' %}
+
+{% block title %}Тесты | Portal{% endblock %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+        <h1 class="page-title">Профориентационные тесты</h1>
+        <div class="subtitle">Выберите тест, чтобы узнать подходящие вам направления обучения</div>
+
+        <ul class="test-links">
+            {% for t in tests %}
+            <li><a href="{% url 'test_detail' t.slug %}">{{ t.title }}</a></li>
+            {% empty %}
+            <li class="test-empty">Пока тестов нет — добавьте их в админке.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
