@@ -13,6 +13,7 @@ urlpatterns = [
     path('abitur/', include('abitur_page.urls')),
     path('proftests/', include('proftests.urls')),
     path('events/', include('events.urls')),
+    path('catalog/', include('catalog.urls')),
 
 ]
 
