@@ -1,0 +1,83 @@
+{% extends 'abitur_page/base.html' %}
+
+{% block title %}Мероприятия | ТулГУ{% endblock %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+        <h1 class="page-title">Календарь мероприятий</h1>
+        <div class="subtitle">Выберите интересующее вас событие, чтобы узнать подробности</div>
+
+        <!-- Фильтры -->
+        <form method="get" class="filters">
+            <div class="filter-group">
+                <label for="sortDate">Дата:</label>
+                <select name="sort" id="sortDate" onchange="this.form.submit()">
+                    <option value="asc" {% if filters.sort == 'asc' %}selected{% endif %}>По возрастанию</option>
+                    <option value="desc" {% if filters.sort == 'desc' %}selected{% endif %}>По убыванию</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterFormat">Формат:</label>
+                <select name="format" id="filterFormat" onchange="this.form.submit()">
+                    <option value="all">Все</option>
+                    <option value="Офлайн" {% if filters.format == 'Офлайн' %}selected{% endif %}>Офлайн</option>
+                    <option value="Онлайн" {% if filters.format == 'Онлайн' %}selected{% endif %}>Онлайн</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterType">Тип:</label>
+                <select name="type" id="filterType" onchange="this.form.submit()">
+                    <option value="all">Все</option>
+                    <option value="Лекция" {% if filters.type == 'Лекция' %}selected{% endif %}>Лекция</option>
+                    <option value="Экскурсия" {% if filters.type == 'Экскурсия' %}selected{% endif %}>Экскурсия</option>
+                    <option value="Олимпиада" {% if filters.type == 'Олимпиада' %}selected{% endif %}>Олимпиада</option>
+                    <option value="Мастер-класс" {% if filters.type == 'Мастер-класс' %}selected{% endif %}>Мастер-класс</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterOrg">Организатор:</label>
+                <select name="org" id="filterOrg" onchange="this.form.submit()">
+                    <option value="all">Все</option>
+                    <option value="uni" {% if filters.org == 'uni' %}selected{% endif %}>От вуза</option>
+                    <option value="employer" {% if filters.org == 'employer' %}selected{% endif %}>От работодателей</option>
+                </select>
+            </div>
+            {% if querystring %}<input type="hidden" name="keep" value="1">{% endif %}
+        </form>
+
+        <div class="content">
+            <div class="sidebar">
+                <ul class="program-list">
+                    {% for event in events %}
+                    <li class="{% if selected == event or not selected and forloop.first %}active{% endif %}">
+                        <a href="?{% if querystring %}{{ querystring }}&{% endif %}selected={{ event.id }}">{{ event.title }}</a>
+                    </li>
+                    {% empty %}
+                    <li class="no-results show">Мероприятий пока нет или они не подходят под фильтр.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="details">
+                {% if selected %}
+                <div class="detail-card active">
+                    <h2>{{ selected.title }}</h2>
+                    <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">{{ selected.organizer }}</span></div>
+                    <div class="info-row"><span class="info-label">Дата проведения:</span><span class="info-value">{{ selected.date|date:"j E Y" }}</span></div>
+                    <div class="info-row"><span class="info-label">Тип мероприятия:</span><span class="info-value">{{ selected.event_type }}</span></div>
+                    <div class="info-row"><span class="info-label">Форма проведения:</span><span class="info-value highlight">{{ selected.format }}</span></div>
+                    <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">{{ selected.duration }}</span></div>
+                    <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">{{ selected.address|default:"—" }}</span></div>
+                    {% if selected.description %}
+                    <div class="info-row"><span class="info-label">Описание:</span><span class="info-value description-text">{{ selected.description }}</span></div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="details-hint">Выберите мероприятие из списка слева, чтобы увидеть подробности.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
