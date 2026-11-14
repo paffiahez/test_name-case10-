@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "main",
     "abitur_page",
+    "proftests",
 ]
 
 MIDDLEWARE = [
