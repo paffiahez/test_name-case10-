@@ -1,0 +1,60 @@
+{% extends 'abitur_page/base.html' %}
+
+{% block title %}{{ test.title }} | Portal{% endblock %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+        <h1 class="page-title">{{ test.title }}</h1>
+        {% if test.description %}
+        <div class="subtitle">{{ test.description }}</div>
+        {% endif %}
+
+        {% if result %}
+            <!-- Результат -->
+            <h2 class="result-title">Ваши результаты</h2>
+            <div class="subtitle">Направления, которые лучше всего подходят вам по ответам</div>
+
+            {% for item in result %}
+            <div class="result-row">
+                <span class="result-name">{{ item.direction.name }}</span>
+                <div class="result-bar">
+                    <div class="result-bar-fill" style="width: {{ item.percent }}%;"></div>
+                </div>
+                <span class="result-score">{{ item.score }} балл{{ item.score|pluralize:"а,ов" }}</span>
+            </div>
+            {% endfor %}
+
+            <div class="result-note">
+                <span class="note-title">Что делать дальше</span>
+                <p>Откройте карточки направлений на главной странице — там подробно описаны
+                целевые места, проходные баллы и условия договора. Результат теста
+                носит рекомендательный характер и не заменяет собственный выбор.</p>
+            </div>
+
+            <a href="{% url 'test_detail' test.slug %}" class="submit-btn result-again">Пройти тест заново</a>
+
+        {% else %}
+            <!-- Прохождение теста -->
+            <form method="post" class="test-form">
+                {% csrf_token %}
+                {% for question in questions %}
+                <div class="question-card">
+                    <div class="question-number">Вопрос {{ forloop.counter }}</div>
+                    <p class="question-text">{{ question.text }}</p>
+                    <div class="answers">
+                        {% for option in question.options.all %}
+                        <label class="answer-option">
+                            <input type="radio" name="q{{ question.id }}" value="{{ option.id }}" required>
+                            <span>{{ option.text }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                <button type="submit" class="submit-btn">Показать результат</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
