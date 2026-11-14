@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Направления — ТулГУ{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Стили для списка направлений и карточек (как в твоем старом коде) */
+    .content { display: flex; gap: 30px; padding: 0 40px 40px; flex-wrap: wrap; }
+    .sidebar { flex: 1; min-width: 280px; border-right: 1px solid #eee; padding-right: 30px; }
+    .program-list { list-style: none; padding: 0; margin: 0; }
+    .program-list li { padding: 12px 15px; margin-bottom: 6px; background-color: #f9f9f9; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 14px; line-height: 1.3; }
+    .program-list li:hover { background-color: #fff0f0; border-left-color: #8b0000; color: #8b0000; }
+    .program-list li.active { background-color: #8b0000; color: white; border-left-color: #5a0000; }
+    .details { flex: 2.5; min-width: 400px; padding-left: 20px; }
+    .detail-card { display: none; animation: fadeIn 0.3s ease; }
+    .detail-card.active { display: block; }
+    .detail-card h2 { color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 12px; font-size: 22px; }
+    .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #eee; gap: 20px; }
+    .info-label { color: #777; flex-shrink: 0; font-size: 15px; }
+    .info-value { font-weight: bold; color: #333; text-align: right; font-size: 15px; }
+    .info-value.price { color: #8b0000; }
+    .info-value.highlight { background-color: #fff0f0; color: #8b0000; padding: 2px 8px; border-radius: 4px; border: 1px solid #f0d0d0; }
+    
+    .note { margin-top: 20px; font-size: 14px; color: #444; line-height: 1.65; background: #fafafa; padding: 15px; border-radius: 6px; border-left: 3px solid #8b0000; cursor: pointer; transition: all 0.3s ease; }
+    .note:hover { background: #f5f5f5; border-left-color: #5a0000; }
+    .note-title { color: #8b0000; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; }
+    .note-title::after { content: '+'; font-size: 20px; font-weight: normal; transition: transform 0.3s; }
+    .note.open .note-title::after { content: '−'; }
+    .note-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; opacity: 0; }
+    .note.open .note-content { opacity: 1; transition: max-height 0.4s ease-out, opacity 0.3s ease-in 0.1s; }
+    .note-content-inner { padding-top: 15px; }
+    .note-content-inner p { margin: 0 0 12px 0; }
+    .note-content-inner p:last-child { margin-bottom: 0; }
+    .note-content-inner strong { color: #8b0000; font-weight: 600; }
+
+    .programs-list { margin-top: 15px; }
+    .program-item { margin-bottom: 10px; border: 1px solid #eee; border-radius: 6px; overflow: hidden; }
+    .program-header { padding: 12px 15px; background: #f9f9f9; cursor: pointer; font-weight: 600; font-size: 14px; color: #333; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+    .program-header:hover { background: #fff0f0; color: #8b0000; }
+    .program-header::after { content: '+'; font-size: 18px; font-weight: normal; }
+    .program-item.open .program-header::after { content: '−'; }
+    .program-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; }
+    .program-content-inner { padding: 15px; font-size: 13.5px; color: #555; line-height: 1.6; border-top: 1px solid #eee; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { .content { flex-direction: column; padding: 0 20px 20px; } .sidebar { border-right: none; border-bottom: 1px solid #eee; padding-right: 0; padding-bottom: 20px; } .details { padding-left: 0; min-width: auto; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 30px 0;">
+    <h1 style="text-align: center; color: #8b0000; padding: 0 20px 10px; margin: 0; font-size: 28px;">Целевое обучение в ТулГУ</h1>
+    <div style="text-align: center; color: #666; margin-bottom: 30px; font-size: 14px;">Направления с выделенными целевыми местами (по данным приемной кампании 2026)</div>
+
+    <div class="content">
+        <div class="sidebar">
+            <ul class="program-list" id="programList">
+                <li data-target="card1" class="active">31.05.01 Лечебное дело</li>
+                <li data-target="card2">31.05.02 Педиатрия</li>
+                <li data-target="card3">15.03.01 Машиностроение</li>
+                <li data-target="card4">15.03.04 Автоматизация технологических процессов</li>
+                <li data-target="card5">13.03.02 Электроэнергетика и электротехника</li>
+                <li data-target="card6">08.03.01 Строительство</li>
+                <li data-target="card7">20.03.01 Техносферная безопасность</li>
+                <li data-target="card8">21.05.04 Горное дело</li>
+            </ul>
+        </div>
+        <div class="details">
+            <!-- КАРТОЧКИ (вставь сюда полный код своих карточек из старого index.html) -->
+            <div id="card1" class="detail-card active">
+                <h2>31.05.01 Лечебное дело</h2>
+                <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная (Специалитет)</span></div>
+                <div class="info-row"><span class="info-label">Целевые места:</span><span class="info-value highlight">86 мест</span></div>
+                <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">6 лет</span></div>
+                <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">~ 260 (ЕГЭ)</span></div>
+                <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">~ 215 000 ₽/год</span></div>
+                <!-- ... остальные строки и note ... -->
+            </div>
+            <!-- ... остальные карточки ... -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Твой скрипт
+    const listItems = document.querySelectorAll('#programList li');
+    const cards = document.querySelectorAll('.detail-card');
+    listItems.forEach(item => {
+        item.addEventListener('click', function() {
+            listItems.forEach(li => li.classList.remove('active'));
+            this.classList.add('active');
+            cards.forEach(card => card.classList.remove('active'));
+            const targetId = this.getAttribute('data-target');
+            document.getElementById(targetId).classList.add('active');
+        });
+    });
+    function toggleNote(element) { /* ... */ }
+    function toggleProgram(element) { /* ... */ }
+</script>
+{% endblock %}

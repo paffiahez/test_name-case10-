@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная — ТулГУ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section { text-align: center; padding: 60px 20px 40px; }
+    .hero-section h1 { color: #8b0000; font-size: 42px; margin-bottom: 20px; }
+    .hero-section p { color: #666; font-size: 18px; max-width: 700px; margin: 0 auto 50px; }
+    
+    .nav-cards { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; padding: 0 20px 60px; }
+    
+    .nav-card {
+        background: white;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 30px;
+        width: 300px;
+        text-align: center;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.1);
+        border-color: #8b0000;
+    }
+    
+    .nav-card svg {
+        width: 50px;
+        height: 50px;
+        fill: #8b0000;
+        margin-bottom: 20px;
+        opacity: 0.8;
+    }
+    
+    .nav-card h3 { color: #8b0000; font-size: 22px; margin: 0 0 10px 0; }
+    .nav-card p { color: #666; font-size: 14px; margin: 0; line-height: 1.5; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-bottom: 40px;">
+    <div class="hero-section">
+        <h1>Добро пожаловать в ТулГУ</h1>
+        <p>Твой навигатор по целевому обучению. Выбери раздел, чтобы узнать больше о направлениях, мероприятиях и возможностях для абитуриентов.</p>
+    </div>
+    
+    <div class="nav-cards">
+        <!-- Карточка 1: Направления -->
+        <a href="/abitur/" class="nav-card">
+            <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+            <h3>Направления</h3>
+            <p>Целевые места ТулГУ, проходные баллы, стоимость обучения и полезные советы.</p>
+        </a>
+
+        <!-- Карточка 2: Мероприятия -->
+        <a href="/events/" class="nav-card">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            <h3>Мероприятия</h3>
+            <p>Календарь событий от вуза и работодателей. Экскурсии, лекции, мастер-классы.</p>
+        </a>
+
+        <!-- Карточка 3: Профтесты -->
+        <a href="/proftests/" class="nav-card">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <h3>Профтесты</h3>
+            <p>Пройди тестирование и узнай, какое направление подходит тебе больше всего.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

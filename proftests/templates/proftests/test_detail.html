@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ test.title }} — ТулГУ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .question-card {
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .question-number {
+        color: #8b0000;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .question-text {
+        font-size: 18px;
+        color: #333;
+        margin: 0 0 15px 0;
+        font-weight: 500;
+    }
+    .answers {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .answer-option {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .answer-option:hover {
+        border-color: #8b0000;
+        background: #fff0f0;
+    }
+    .answer-option input[type="radio"] {
+        margin-right: 15px;
+        accent-color: #8b0000; /* Делает кружок бордовым */
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #8b0000;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-top: 20px;
+    }
+    .submit-btn:hover { background-color: #a51c1c; }
+
+    /* Стили для результатов */
+    .result-title { color: #8b0000; margin-top: 0; }
+    .result-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    .result-name { width: 200px; font-weight: 600; color: #333; font-size: 15px; }
+    .result-bar {
+        flex: 1;
+        height: 12px;
+        background: #eee;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .result-bar-fill {
+        height: 100%;
+        background-color: #8b0000;
+        border-radius: 6px;
+    }
+    .result-score { width: 80px; text-align: right; font-weight: bold; color: #8b0000; font-size: 14px; }
+    .result-note {
+        background: #fafafa;
+        border-left: 4px solid #8b0000;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 30px;
+    }
+    .result-note .note-title { font-weight: bold; color: #8b0000; display: block; margin-bottom: 5px; }
+    .result-note p { margin: 0; color: #555; font-size: 14px; line-height: 1.6; }
+    .result-again { display: inline-block; width: auto; margin-top: 20px; text-decoration: none; text-align: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px;">
+    <h1 style="color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 15px; margin-bottom: 20px;">{{ test.title }}</h1>
+    {% if test.description %}
+    <div style="color: #666; margin-bottom: 30px; font-size: 16px;">{{ test.description }}</div>
+    {% endif %}
+
+    {% if result %}
+        <!-- РЕЖИМ РЕЗУЛЬТАТОВ -->
+        <h2 class="result-title">Ваши результаты</h2>
+        <div style="color: #666; margin-bottom: 30px;">Направления, которые лучше всего подходят вам по ответам</div>
+
+        <div style="margin-top: 20px;">
+            {% for item in result %}
+            <div class="result-row">
+                <span class="result-name">{{ item.direction.name }}</span>
+                <div class="result-bar">
+                    <div class="result-bar-fill" style="width: {{ item.percent }}%;"></div>
+                </div>
+                <span class="result-score">{{ item.score }} б.</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="result-note">
+            <span class="note-title">Что делать дальше</span>
+            <p>Откройте карточки направлений на главной странице — там подробно описаны
+            целевые места, проходные баллы и условия договора. Результат теста
+            носит рекомендательный характер и не заменяет собственный выбор.</p>
+        </div>
+
+        <a href="{% url 'test_detail' test.slug %}" class="submit-btn result-again">Пройти тест заново</a>
+
+    {% else %}
+        <!-- РЕЖИМ ПРОХОЖДЕНИЯ ТЕСТА -->
+        <form method="post" class="test-form">
+            {% csrf_token %}
+            {% for question in questions %}
+            <div class="question-card">
+                <div class="question-number">Вопрос {{ forloop.counter }}</div>
+                <p class="question-text">{{ question.text }}</p>
+                <div class="answers">
+                    {% for option in question.options.all %}
+                    <label class="answer-option">
+                        <input type="radio" name="q{{ question.id }}" value="{{ option.id }}" required>
+                        <span>{{ option.text }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit" class="submit-btn">Показать результат</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
