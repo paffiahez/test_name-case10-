@@ -19,10 +19,12 @@ from django.urls import path
 from catalog.views import home
 from events_jober.views import events_list
 from events_craft.views import craft_events
+from events_vuz.views import vuz_events
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),           
     path('events/', events_list, name='events'), 
     path('craft/', craft_events, name='craft'),
+    path('vuz/', vuz_events, name='vuz'),
 ]

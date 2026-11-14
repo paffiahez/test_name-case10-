@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'catalog',
     'events_jober',
     'events_craft',
+    'events_vuz',
 ]
 
 MIDDLEWARE = [
