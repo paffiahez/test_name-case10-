@@ -1,17 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %}Главная | Portal{% endblock %}
+{% block title %}Главная | ТулГУ{% endblock %}
 
 {% block header_content %}
-    <!-- This is the grey "plate" area. You can replace this with any content (e.g., a logo, or another menu) -->
+<!-- Серая плашка сверху: здесь можно разместить логотип или меню -->
 {% endblock %}
 
 {% block content %}
-    <!-- Сетка плиток 2x2 -->
+<!-- Сетка плиток 2x2 -->
+<div class="layout">
     <div class="tiles">
-        <a href="#" class="tile">Кнопка 1</a>
-        <a href="#" class="tile">Кнопка 2</a>
-        <a href="#" class="tile">Кнопка 3</a>
-        <a href="#" class="tile">Кнопка 4</a>
+        <a href="{% url 'proftests_list' %}" class="tile">
+            <div class="tile__text">
+                <div class="tile__title">Профориентационные тесты</div>
+                <div class="tile__subtitle">Поможем найти призвание и подходящую специальность</div>
+            </div>
+        </a>
+
+        <a href="#" class="tile">
+            <div class="tile__text">
+                <div class="tile__title">Направления от партнёров ТулГУ</div>
+            </div>
+        </a>
+
+        <a href="#" class="tile">
+            <div class="tile__text">
+                <div class="tile__title">О студентах ТулГУ</div>
+            </div>
+        </a>
+
+        <a href="{% url 'event_list' %}" class="tile">
+            <div class="tile__text">
+                <div class="tile__title">Мероприятия и события</div>
+                <div class="tile__subtitle">Откройте новые возможности и раскройте свой потенциал</div>
+            </div>
+        </a>
     </div>
+</div>
 {% endblock %}
