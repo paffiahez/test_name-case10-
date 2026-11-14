@@ -1,0 +1,59 @@
+/* ===== Страницы тестов ===== */
+.main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; }
+.container { max-width: 900px; width: 100%; background: #fff; border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid #8b0000; padding-bottom: 40px; }
+.page-title { text-align: center; color: #8b0000; padding: 30px 20px 10px; margin: 0; font-size: 28px; }
+.subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; padding: 0 20px; }
+
+/* Вопросы */
+.question-card { margin: 0 40px 20px; padding: 20px; background: #f9f9f9;
+    border-left: 4px solid transparent; border-radius: 6px; transition: all 0.2s; }
+.question-card:hover { background-color: #fff0f0; border-left-color: #8b0000; }
+.question-number { color: #8b0000; font-weight: 600; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.question-text { font-weight: 600; font-size: 16px; margin: 0 0 15px; color: #333; line-height: 1.4; }
+.answers { display: flex; flex-direction: column; gap: 8px; }
+.answer-option { display: flex; align-items: center; gap: 12px; padding: 12px 15px;
+    background: #fff; border: 1px solid #e5e5e5; border-radius: 6px; cursor: pointer;
+    transition: all 0.2s; font-size: 14px; line-height: 1.35; }
+.answer-option:hover { border-color: #8b0000; background-color: #fff0f0; color: #8b0000; }
+.answer-option input[type=radio] { accent-color: #8b0000; width: 16px; height: 16px; flex-shrink: 0; }
+.answer-option input:checked + span { color: #8b0000; font-weight: 600; }
+
+/* Кнопка */
+.submit-btn { display: block; margin: 30px auto 0; padding: 14px 40px; background: #8b0000;
+    color: #fff; border: none; border-radius: 6px; font-size: 15px; font-weight: 600;
+    cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.submit-btn:hover { background: #5a0000; transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(139, 0, 0, 0.2); }
+.result-again { margin-top: 35px; }
+
+/* Результат */
+.result-title { text-align: center; color: #8b0000; font-size: 22px; padding: 10px 20px 0; margin: 0; }
+.result-row { display: flex; align-items: center; gap: 15px; margin: 0 40px;
+    padding: 14px 0; border-bottom: 1px solid #eee; }
+.result-name { flex-shrink: 1; font-weight: 600; color: #333; font-size: 15px; }
+.result-bar { flex: 1; min-width: 80px; height: 10px; background: #fff0f0;
+    border-radius: 5px; overflow: hidden; }
+.result-bar-fill { height: 100%; background: #8b0000; border-radius: 5px; transition: width 0.5s ease; }
+.result-score { flex-shrink: 0; background-color: #fff0f0; color: #8b0000; padding: 2px 8px;
+    border-radius: 4px; border: 1px solid #f0d0d0; font-weight: bold; font-size: 14px; }
+.result-note { margin: 25px 40px 0; font-size: 14px; color: #444; line-height: 1.65;
+    background: #fafafa; padding: 15px; border-radius: 6px; border-left: 3px solid #8b0000; }
+.result-note .note-title { color: #8b0000; display: block; font-weight: bold;
+    font-size: 15px; margin-bottom: 8px; }
+.result-note p { margin: 0; }
+
+/* Список тестов */
+.test-links { list-style: none; padding: 0 40px; margin: 0; }
+.test-links li { padding: 12px 15px; margin-bottom: 6px; background-color: #f9f9f9;
+    border-left: 4px solid transparent; border-radius: 6px; transition: all 0.2s; font-size: 14px; }
+.test-links li:hover { background-color: #fff0f0; border-left-color: #8b0000; }
+.test-links a { color: #333; font-weight: 500; text-decoration: none; }
+.test-links a:hover { color: #8b0000; }
+.test-empty { color: #777; cursor: default; }
+
+@media (max-width: 768px) {
+    .question-card, .result-row, .result-note { margin-left: 20px; margin-right: 20px; }
+    .test-links { padding: 0 20px; }
+}
