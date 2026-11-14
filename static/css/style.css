@@ -248,3 +248,39 @@ a {
     color: #8b0000; border: 1px solid #8b0000; background: #fff; transition: all 0.2s; }
 .role-btn:hover { background: #fff0f0; }
 .role-btn.active { background: #8b0000; color: #fff; }
+/* ===== Страница сотрудника вуза ===== */
+.admin-link-container { text-align: center; margin-bottom: 20px; }
+.btn-admin { display: inline-block; background: #8b0000; color: #fff; text-decoration: none;
+    padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;
+    box-shadow: 0 4px 6px rgba(139,0,0,0.2); transition: background 0.2s; }
+.btn-admin:hover { background: #5a0000; }
+
+.notifications-panel { background: #fafafa; border: 1px solid #eee;
+    border-left: 4px solid #8b0000; border-radius: 8px; padding: 20px;
+    margin: 0 40px 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+.notifications-panel h2 { margin-top: 0; color: #8b0000; font-size: 20px;
+    border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+.notification-item { background: #fff; border: 1px solid #eee; padding: 15px;
+    margin-bottom: 15px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+.notification-item h4 { margin: 0 0 5px; font-size: 16px; }
+.notification-item .req-org { font-weight: bold; color: #8b0000; font-size: 14px;
+    margin-bottom: 10px; }
+.notification-item .req-details { font-size: 13px; color: #555; margin-bottom: 10px;
+    display: flex; flex-wrap: wrap; gap: 10px; }
+.notification-item .req-details span { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; }
+.notification-item .req-desc { font-size: 13px; color: #444; margin: 0 0 10px; }
+.notification-actions { display: flex; gap: 10px; }
+.notification-actions form { margin: 0; }
+
+.btn-accept, .btn-reject { padding: 8px 15px; border: none; border-radius: 4px;
+    cursor: pointer; font-weight: bold; font-size: 13px; font-family: inherit;
+    transition: background 0.2s; }
+.btn-accept { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+.btn-accept:hover { background: #bbdefb; }
+.btn-reject { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+.btn-reject:hover { background: #ffcdd2; }
+
+@media (max-width: 768px) {
+    .notifications-panel { margin: 0 20px 20px; }
+}
