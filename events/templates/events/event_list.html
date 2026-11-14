@@ -79,5 +79,65 @@
             </div>
         </div>
     </div>
+    <div class="request-link-container">
+    <button type="button" class="btn-request" onclick="document.getElementById('requestModal').style.display='block'">✎ Оставить заявку на изменение / добавление</button>
+</div>
+
+<div id="requestModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="document.getElementById('requestModal').style.display='none'">&times;</span>
+        <h2>Заявка вузу</h2>
+        <p>Заполните поля, и вуз рассмотрит вашу заявку.</p>
+        <form method="post" action="{% url 'event_request' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="reqTitle">Название мероприятия</label>
+                <input type="text" name="title" id="reqTitle" required placeholder="Например: День открытых дверей">
+            </div>
+            <div class="form-group form-row">
+                <div class="form-col">
+                    <label for="reqDate">Дата</label>
+                    <input type="date" name="date" id="reqDate" required>
+                </div>
+                <div class="form-col">
+                    <label for="reqFormat">Формат</label>
+                    <select name="format" id="reqFormat" required>
+                        <option value="Офлайн">Офлайн</option>
+                        <option value="Онлайн">Онлайн</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reqType">Тип мероприятия</label>
+                <select name="event_type" id="reqType" required>
+                    <option value="Лекция">Лекция</option>
+                    <option value="Экскурсия">Экскурсия</option>
+                    <option value="Олимпиада">Олимпиада</option>
+                    <option value="Мастер-класс">Мастер-класс</option>
+                </select>
+            </div>
+            <div class="form-group form-row">
+                <div class="form-col">
+                    <label for="reqTime">Длительность</label>
+                    <input type="text" name="duration" id="reqTime" required placeholder="2 ч. 30 мин.">
+                </div>
+                <div class="form-col">
+                    <label for="reqOrg">Ваша организация</label>
+                    <input type="text" name="organization" id="reqOrg" required placeholder="ООО Ромашка">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reqAddress">Адрес (если онлайн — пусто)</label>
+                <input type="text" name="address" id="reqAddress" placeholder="г. Тула, пр. Ленина, д. 92">
+            </div>
+            <div class="form-group">
+                <label for="reqDesc">Описание</label>
+                <textarea name="description" id="reqDesc" rows="3" required placeholder="Подробности..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Отправить заявку</button>
+        </form>
+    </div>
+</div>
+
 </div>
 {% endblock %}
