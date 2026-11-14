@@ -1,0 +1,71 @@
+{% extends 'abitur_page/base.html' %}
+
+{% block title %}Целевые места | ТулГУ{% endblock %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+        <h1 class="page-title">Целевое обучение в ТулГУ</h1>
+        <div class="subtitle">Направления с выделенными целевыми местами (по данным приемной кампании 2026)</div>
+
+        <div class="content">
+            <div class="sidebar">
+                <ul class="program-list">
+                    {% for program in programs %}
+                    <li class="{% if selected == program or not selected and forloop.first %}active{% endif %}">
+                        <a href="?selected={{ program.pk }}">{{ program.code }} {{ program.title }}</a>
+                    </li>
+                    {% empty %}
+                    <li class="no-results">Направлений пока нет — загрузи их командой load_catalog.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="details">
+                {% with active_program=selected|default:programs.first %}
+                {% if active_program %}
+                <div class="detail-card">
+                    <h2>{{ active_program.code }} {{ active_program.title }}</h2>
+                    <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">{{ active_program.form }}</span></div>
+                    <div class="info-row"><span class="info-label">Целевые места:</span><span class="info-value highlight">{{ active_program.places }} мест</span></div>
+                    <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">{{ active_program.duration }}</span></div>
+                    <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">{{ active_program.avg_score }}</span></div>
+                    <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">{{ active_program.price }}</span></div>
+
+                    {% if active_program.notes.all %}
+                    <div class="note">
+                        <span class="note-title" onclick="toggleNote(this.parentElement)">Полезно знать</span>
+                        <div class="note-content">
+                            <div class="note-content-inner">
+                                {% for note in active_program.notes.all %}
+                                <p><strong>{{ note.label }}:</strong> {{ note.text }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if active_program.pdf %}
+                    <a href="{% static active_program.pdf %}" target="_blank" class="pdf-download">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                        Скачать расписание (PDF)
+                    </a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="details-hint">Выберите направление из списка слева, чтобы увидеть подробности.</div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleNote(note) {
+        note.classList.toggle('open');
+        const content = note.querySelector('.note-content');
+        content.style.maxHeight = content.style.maxHeight ? '' : content.scrollHeight + 'px';
+    }
+</script>
+{% endblock %}
