@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мероприятия для вуза | ТулГУ</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fcfcfc; color: #333; margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        .container { max-width: 1200px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; border-top: 5px solid #8b0000; }
+        h1 { text-align: center; color: #8b0000; padding: 30px 20px 10px; margin: 0; font-size: 28px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
+        
+        .admin-link-container { text-align: center; margin-bottom: 20px; }
+        .btn-admin { display: inline-block; background-color: #8b0000; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: background 0.2s; box-shadow: 0 4px 6px rgba(139, 0, 0, 0.2); }
+        .btn-admin:hover { background-color: #5a0000; }
+
+        .filters { display: flex; justify-content: center; gap: 15px; padding: 0 40px 30px; flex-wrap: wrap; border-bottom: 1px solid #eee; margin-bottom: 20px; }
+        .filter-group { display: flex; align-items: center; gap: 8px; }
+        .filter-group label { font-size: 14px; color: #555; font-weight: 500; }
+        .filters select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; background-color: #fff; font-family: inherit; font-size: 14px; color: #333; cursor: pointer; outline: none; transition: border-color 0.2s; }
+        .filters select:focus, .filters select:hover { border-color: #8b0000; }
+
+        .content { display: flex; gap: 30px; padding: 0 40px 40px; flex-wrap: wrap; }
+        .sidebar { flex: 1; min-width: 280px; border-right: 1px solid #eee; padding-right: 30px; }
+        .program-list { list-style: none; padding: 0; margin: 0; }
+        .program-list li { padding: 12px 15px; margin-bottom: 6px; background-color: #f9f9f9; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 14px; line-height: 1.3; }
+        .program-list li:hover { background-color: #fff0f0; border-left-color: #8b0000; color: #8b0000; }
+        .program-list li.active { background-color: #8b0000; color: white; border-left-color: #5a0000; }
+
+        .details { flex: 2.5; min-width: 400px; padding-left: 20px; }
+        .detail-card { display: none; animation: fadeIn 0.3s ease; }
+        .detail-card.active { display: block; }
+        .no-results { display: none; color: #777; font-style: italic; padding: 20px 0; text-align: center; }
+        .no-results.show { display: block; }
+
+        .detail-card h2 { color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 12px; font-size: 22px; line-height: 1.3; }
+        .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #eee; gap: 20px; }
+        .info-label { color: #777; flex-shrink: 0; font-size: 15px; width: 180px; }
+        .info-value { font-weight: bold; color: #333; text-align: right; font-size: 15px; line-height: 1.5; }
+        .info-value.highlight { background-color: #fff0f0; color: #8b0000; padding: 2px 8px; border-radius: 4px; border: 1px solid #f0d0d0; }
+        .info-value.description-text { text-align: right; font-weight: 400; color: #444; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .filters { flex-direction: column; align-items: stretch; padding: 0 20px 20px; }
+            .filter-group { justify-content: space-between; }
+            .content { flex-direction: column; padding: 0 20px 20px; }
+            .sidebar { border-right: none; border-bottom: 1px solid #eee; padding-right: 0; padding-bottom: 20px; }
+            .details { padding-left: 0; min-width: auto; }
+            .info-label { width: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Календарь мероприятий</h1>
+    <div class="subtitle">Режим просмотра для сотрудников вуза</div>
+
+    <div class="admin-link-container">
+        <a href="/craft/" class="btn-admin">✎ Редактировать мероприятия</a>
+    </div>
+
+    <div class="filters">
+        <div class="filter-group">
+            <label for="sortDate">Дата:</label>
+            <select id="sortDate">
+                <option value="asc">По возрастанию</option>
+                <option value="desc">По убыванию</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="filterFormat">Формат:</label>
+            <select id="filterFormat">
+                <option value="all">Все</option>
+                <option value="Офлайн">Офлайн</option>
+                <option value="Онлайн">Онлайн</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="filterType">Тип:</label>
+            <select id="filterType">
+                <option value="all">Все</option>
+                <option value="Лекция">Лекция</option>
+                <option value="Экскурсия">Экскурсия</option>
+                <option value="Олимпиада">Олимпиада</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="filterOrg">Организатор:</label>
+            <select id="filterOrg">
+                <option value="all">Все</option>
+                <option value="uni">От вуза</option>
+                <option value="employer">От работодателей</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="sidebar">
+            <ul class="program-list" id="programList"></ul>
+            <div id="noResults" class="no-results">Мероприятий пока нет или они не подходят под фильтр.</div>
+        </div>
+        <div class="details" id="detailsContainer"></div>
+    </div>
+</div>
+
+<script>
+    let defaultEvents = [
+        { id: 1, title: 'Олимпиада по информатике', date: '2026-04-15', format: 'Офлайн', type: 'Олимпиада', time: '3 ч. 00 мин.', org: 'Приемная комиссия ТулГУ', address: 'г. Тула, пр. Ленина, д. 92', desc: 'Проверьте свои знания в области программирования.' },
+        { id: 2, title: 'Ярмарка вакансий "Карьера 2026"', date: '2026-05-20', format: 'Офлайн', type: 'Лекция', time: '4 ч. 00 мин.', org: 'Центр карьеры ТулГУ', address: 'г. Тула, ул. Ф. Энгельса, д. 155', desc: 'Крупнейшее карьерное событие региона.' },
+        { id: 3, title: 'Мастер-класс по IT', date: '2026-06-10', format: 'Онлайн', type: 'Лекция', time: '1 ч. 30 мин.', org: 'Компания "СберТех"', address: '—', desc: 'Современные подходы к разработке на Python.' },
+        { id: 4, title: 'Экскурсия на завод "Сплав"', date: '2026-06-25', format: 'Офлайн', type: 'Экскурсия', time: '3 ч. 00 мин.', org: 'АО "НПО "Сплав"', address: 'г. Тула, ул. Щегловская засека, д. 33', desc: 'Экскурсия для студентов старших курсов.' },
+        { id: 5, title: 'Онлайн-вебинар "Поступление"', date: '2026-07-01', format: 'Онлайн', type: 'Лекция', time: '1 ч. 00 мин.', org: 'Приемная комиссия', address: '—', desc: 'Разбор всех изменений в правилах приема.' }
+    ];
+
+    let eventsData = JSON.parse(localStorage.getItem('tulgu_events')) || defaultEvents;
+
+    const programList = document.getElementById('programList');
+    const detailsContainer = document.getElementById('detailsContainer');
+    const noResults = document.getElementById('noResults');
+    const sortDateSelect = document.getElementById('sortDate');
+    const filterFormatSelect = document.getElementById('filterFormat');
+    const filterTypeSelect = document.getElementById('filterType');
+    const filterOrgSelect = document.getElementById('filterOrg');
+
+    function getOrgType(orgName) {
+        const lowerOrg = orgName.toLowerCase();
+        if (lowerOrg.includes('тулгу') || lowerOrg.includes('приемная') || lowerOrg.includes('центр карьеры')) return 'uni';
+        return 'employer';
+    }
+
+    function renderSite() {
+        programList.innerHTML = '';
+        detailsContainer.innerHTML = '';
+
+        if (eventsData.length === 0) { noResults.classList.add('show'); return; } else { noResults.classList.remove('show'); }
+
+        const sortOrder = sortDateSelect.value;
+        eventsData.sort((a, b) => {
+            const dateA = new Date(a.date); const dateB = new Date(b.date);
+            return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+        });
+
+        const formatFilter = filterFormatSelect.value;
+        const typeFilter = filterTypeSelect.value;
+        const orgFilter = filterOrgSelect.value;
+
+        const filteredEvents = eventsData.filter(ev => {
+            const matchFormat = (formatFilter === 'all' || ev.format === formatFilter);
+            const matchType = (typeFilter === 'all' || ev.type === typeFilter);
+            const matchOrg = (orgFilter === 'all' || getOrgType(ev.org) === orgFilter);
+            return matchFormat && matchType && matchOrg;
+        });
+
+        if (filteredEvents.length === 0) { noResults.classList.add('show'); return; }
+
+        filteredEvents.forEach((event, index) => {
+            const li = document.createElement('li');
+            li.textContent = event.title;
+            if (index === 0) li.classList.add('active');
+            li.dataset.id = event.id;
+            li.addEventListener('click', function() {
+                document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.detail-card').forEach(el => el.classList.remove('active'));
+                document.getElementById(`card-${event.id}`).classList.add('active');
+            });
+            programList.appendChild(li);
+
+            const card = document.createElement('div');
+            card.className = `detail-card ${index === 0 ? 'active' : ''}`;
+            card.id = `card-${event.id}`;
+            const dateObj = new Date(event.date);
+            const formattedDate = dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            card.innerHTML = `
+                <h2>${event.title}</h2>
+                <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">${event.org}</span></div>
+                <div class="info-row"><span class="info-label">Дата проведения:</span><span class="info-value">${formattedDate}</span></div>
+                <div class="info-row"><span class="info-label">Тип мероприятия:</span><span class="info-value">${event.type}</span></div>
+                <div class="info-row"><span class="info-label">Форма проведения:</span><span class="info-value highlight">${event.format}</span></div>
+                <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">${event.time}</span></div>
+                <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
+                <div class="info-row"><span class="info-label">Описание:</span><span class="info-value description-text">${event.desc}</span></div>
+            `;
+            detailsContainer.appendChild(card);
+        });
+    }
+
+    sortDateSelect.addEventListener('change', renderSite);
+    filterFormatSelect.addEventListener('change', renderSite);
+    filterTypeSelect.addEventListener('change', renderSite);
+    filterOrgSelect.addEventListener('change', renderSite);
+    renderSite();
+</script>
+</body>
+</html>
