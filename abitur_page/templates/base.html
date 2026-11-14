@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Верхняя серая полоса -->
+    <header class="top-bar">
+        <nav class="top-menu">
+            <a href="#" class="top-btn">Кнопка 1</a>
+            <a href="#" class="top-btn">Кнопка 2</a>
+            <a href="#" class="top-btn">Кнопка 3</a>
+        </nav>
+    </header>
+
+    <!-- Контент -->
+    <main class="layout">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
