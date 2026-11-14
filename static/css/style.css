@@ -14,10 +14,11 @@ a {
     text-decoration: none;
 }
 
-/* ===== Верхняя серая полоса ===== */
+/* ===== Верх..'top-bar' (Plate) ===== */
+/* Эту секцию можно легко заменить на логотип или другое меню */
 .top-bar {
-    background: #d9d9d9;
-    padding: 90px 20px 40px;
+    background: #d3d3d3; /* Light grey color from image */
+    padding: 20px;       /* Reduced padding to make it a "plate" */
     display: flex;
     justify-content: center;
 }
@@ -61,18 +62,18 @@ a {
 
 /* ===== Большие плитки ===== */
 .tile {
-    align-items: flex-start;
-    background: #26404a;
-    border-radius: 10px;
+    align-items: center;
+    background: #8b0000; /* Dark red from image */
+    border-radius: 15px; /* Rounded corners */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-    color: #e53935;
+    color: white;        /* White text for contrast */
     display: flex;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     justify-content: center;
-    min-height: 350px;
-    padding-top: 40px;
-    transition: transform 0.15s, box-shadow 0.15s;
+    min-height: 200px;   /* Adjusted height for a button look */
+    padding: 20px;
+    transition: transform 0s, box-shadow 0.15s; /* Smooth transition */
 }
 
 .tile--blue {
