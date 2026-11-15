@@ -45,6 +45,7 @@ urlpatterns = [
 
     path('companies/', companies_view, name='companies'),
     path('contracts/', contracts_view, name='contracts'),
+    path('offers/', include('abitur_page.urls')),
 
 ]
 
