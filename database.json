@@ -1,6 +1,7 @@
 {
     "users": {
         "student1": {
+            "tag": "Студент",
             "password": "123",
             "role": "student",
             "name": "Иванов Иван",
@@ -14,6 +15,7 @@
             "mentor_id": "mentor1"
         },
         "student2": {
+            "tag": "Абитуриент",
             "password": "123",
             "role": "student",
             "name": "Петрова Анна",

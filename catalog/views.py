@@ -14,21 +14,21 @@ def login_view(request):
         
         if username in users and users[username]['password'] == password:
             request.session['user_id'] = username
-            return redirect('dashboard') # <--- Ведем на главную с кнопками
+            return redirect('dashboard')
         else:
             error = "Неверный логин или пароль."
             
     return render(request, 'pages/login.html', {'error': error})
 
 def logout_view(request):
-    request.session.flush() # Очищаем сессию
-    return redirect('/')    # Ведем на страницу входа (логин)
+    request.session.flush()
+    return redirect('/')
 
 # --- РОУТЕР (Главная страница после входа) ---
 def dashboard_view(request):
     username = request.session.get('user_id')
     if not username:
-        return redirect('login') # Если не вошел - на логин
+        return redirect('login')
     
     data = load_data()
     user = data['users'].get(username)
@@ -37,11 +37,11 @@ def dashboard_view(request):
         
     role = user.get('role')
 
-    # 1. СТУДЕНТ (Главная страница с кнопками Направления/Мероприятия)
+    # 1. СТУДЕНТ
     if role == 'student':
         return render(request, 'main/index.html', {'user': user}) 
         
-    # 2. СОТРУДНИК ВУЗА (Панель управления)
+    # 2. СОТРУДНИК ВУЗА
     elif role == 'staff':
         events = data.get('events', [])
         requests = data.get('requests', [])
@@ -57,31 +57,15 @@ def dashboard_view(request):
             return redirect('dashboard')
         return render(request, 'pages/events_vuz.html', {'user': user, 'events': events, 'requests': [r for r in requests if r['status'] == 'pending']})
         
-    # 3. РАБОТОДАТЕЛЬ (Просмотр + Заявка)
+    # 3. РАБОТОДАТЕЛЬ (Ведем на новую главную с 3 кнопками)
     elif role == 'employer':
-        events = data.get('events', [])
-        if request.method == 'POST' and 'create_request' in request.POST:
-            new_req = {
-                "id": int(datetime.now().timestamp()),
-                "dateSubmitted": datetime.now().strftime("%d.%m.%Y %H:%M"),
-                "status": "pending",
-                "eventData": {
-                    "title": request.POST.get('title'), "date": request.POST.get('date'),
-                    "format": request.POST.get('format'), "type": request.POST.get('type'),
-                    "time": request.POST.get('time'), "org": request.POST.get('org'),
-                    "orgType": "employer", "address": request.POST.get('address'), "desc": request.POST.get('desc')
-                }
-            }
-            data.setdefault('requests', []).append(new_req)
-            save_data(data)
-            return redirect('dashboard')
-        return render(request, 'pages/events_jober.html', {'user': user, 'events': events})
+        return render(request, 'pages/employer_dashboard.html', {'user': user})
         
-    # 4. НАСТАВНИК (Заглушка)
+    # 4. НАСТАВНИК
     else:
         return render(request, 'pages/not_student.html', {'user': user})
 
-# --- ПРОФИЛЬ (Анкета и Чат) ---
+# --- ПРОФИЛЬ ---
 def profile_view(request):
     username = request.session.get('user_id')
     if not username:
@@ -134,3 +118,87 @@ def send_message(request):
             })
             save_data(data)
         return redirect('profile')
+
+# --- СТРАНИЦЫ РАБОТОДАТЕЛЯ (НОВЫЕ) ---
+
+def employer_events_view(request):
+    username = request.session.get('user_id')
+    if not username: return redirect('login')
+    
+    data = load_data()
+    user = data['users'].get(username)
+    events = data.get('events', [])
+    
+    # Обработка создания заявки
+    if request.method == 'POST' and 'create_request' in request.POST:
+        new_req = {
+            "id": int(datetime.now().timestamp()),
+            "dateSubmitted": datetime.now().strftime("%d.%m.%Y %H:%M"),
+            "status": "pending",
+            "eventData": {
+                "title": request.POST.get('title'), "date": request.POST.get('date'),
+                "format": request.POST.get('format'), "type": request.POST.get('type'),
+                "time": request.POST.get('time'), "org": request.POST.get('org'),
+                "orgType": "employer", "address": request.POST.get('address'), "desc": request.POST.get('desc')
+            }
+        }
+        data.setdefault('requests', []).append(new_req)
+        save_data(data)
+        return redirect('dashboard')
+
+    return render(request, 'pages/events_jober.html', {'user': user, 'events': events})
+
+def employer_students_view(request):
+    username = request.session.get('user_id')
+    if not username: return redirect('login')
+    
+    data = load_data()
+    students = []
+    for uname, u in data['users'].items():
+        if u.get('role') == 'student':
+            # Берем профиль и добавляем тег (по умолчанию 'Абитуриент')
+            profile = u.get('profile', {})
+            tag = u.get('tag', 'Абитуриент') # <-- Поле для тега
+            
+            students.append({
+                'username': uname,
+                'name': u.get('name'),
+                'profile': profile,
+                'tag': tag, # <-- Передаем тег в шаблон
+                'pdf_url': f"/static/grades/{uname}_grades.pdf" # <-- Ссылка на PDF (заглушка)
+            })
+            
+    return render(request, 'pages/employer_students.html', {'students': students})
+
+def employer_documents_view(request):
+    username = request.session.get('user_id')
+    if not username: return redirect('login')
+    return render(request, 'pages/employer_documents.html')
+
+def employer_events_view(request):
+    username = request.session.get('user_id')
+    if not username: return redirect('login')
+    
+    data = load_data()
+    user = data['users'].get(username)
+    events = data.get('events', [])
+    
+    # Если работодатель отправил заявку через форму (POST)
+    if request.method == 'POST' and 'create_request' in request.POST:
+        new_req = {
+            "id": int(datetime.now().timestamp()),
+            "dateSubmitted": datetime.now().strftime("%d.%m.%Y %H:%M"),
+            "status": "pending",
+            "eventData": {
+                "title": request.POST.get('title'), "date": request.POST.get('date'),
+                "format": request.POST.get('format'), "type": request.POST.get('type'),
+                "time": request.POST.get('time'), "org": request.POST.get('org'),
+                "orgType": "employer", "address": request.POST.get('address'), "desc": request.POST.get('desc')
+            }
+        }
+        data.setdefault('requests', []).append(new_req)
+        save_data(data)
+        return redirect('employer_events')
+
+    # Отдаем страницу Насти (она лежит в pages/events_jober.html)
+    return render(request, 'pages/events_jober.html', {'user': user, 'events': events})

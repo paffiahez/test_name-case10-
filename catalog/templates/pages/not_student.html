@@ -1,63 +1,68 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет — ТулГУ</title>
-    <style>
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fcfcfc;
-            color: #333;
-            margin: 0; padding: 0;
-            display: flex; flex-direction: column; align-items: center;
-            width: 100%; min-height: 100vh;
-        }
-        
-        /* Шапка */
-        .site-header { width: 100%; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
-        .header-container { max-width: 1000px; margin: 0 auto; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo { font-size: 20px; font-weight: 800; color: #8b0000; text-decoration: none; letter-spacing: -0.5px; }
-        .header-right-group { display: flex; align-items: center; gap: 20px; }
-        .nav-menu { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; }
-        .nav-menu a { text-decoration: none; color: #555; font-weight: 500; font-size: 14px; }
-        .nav-menu a:hover { color: #8b0000; }
-        .logout-btn { color: #8b0000; text-decoration: none; font-weight: bold; font-size: 14px; border: 1px solid #8b0000; padding: 5px 10px; border-radius: 4px; transition: all 0.3s; }
-        .logout-btn:hover { background-color: #8b0000; color: white; }
+{% extends 'base.html' %}
 
-        /* Контент */
-        .main-wrapper { width: 100%; padding: 40px 20px; display: flex; justify-content: center; flex: 1; align-items: center; }
-        .container { max-width: 600px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow: hidden; border-top: 5px solid #8b0000; padding: 40px; text-align: center; }
+{% block title %}Личный кабинет — ТулГУ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .not-student-wrapper {
+        width: 100%;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+    .not-student-card {
+        max-width: 600px;
+        width: 100%;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+        border-top: 5px solid #8b0000;
+        padding: 40px;
+        text-align: center;
+    }
+    .not-student-card h1 {
+        color: #8b0000;
+        margin-top: 0;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    .role-badge {
+        display: inline-block;
+        background: #f4f4f4;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: bold;
+        color: #8b0000;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+    .not-student-card p {
+        color: #555;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="not-student-wrapper">
+    <div class="not-student-card">
+        <h1>Личный кабинет</h1>
         
-        h1 { color: #8b0000; margin-top: 0; font-size: 24px; margin-bottom: 20px; }
-        p { color: #555; font-size: 16px; line-height: 1.6; margin-bottom: 20px; }
-        .role-badge { display: inline-block; background: #f4f4f4; padding: 5px 15px; border-radius: 20px; font-weight: bold; color: #8b0000; margin-bottom: 20px; }
-    </style>
-</head>
-<body>
-    <header class="site-header">
-        <div class="header-container">
-            <a href="/" class="logo">ТулГУ | Целевое</a>
-            <div class="header-right-group">
-                <ul class="nav-menu">
-                    <li><a href="/about/">О нас</a></li>
-                    <li><a href="/contacts/">Контакты</a></li>
-                </ul>
-                <a href="{% url 'logout' %}" class="logout-btn">Выйти</a>
-            </div>
+        <div class="role-badge">
+            Роль: 
+            {% if user.role == 'mentor' %}Наставник
+            {% elif user.role == 'employer' %}Работодатель
+            {% elif user.role == 'staff' %}Сотрудник вуза
+            {% else %}Пользователь{% endif %}
         </div>
-    </header>
-
-    <div class="main-wrapper">
-        <div class="container">
-            <h1>Личный кабинет</h1>
-            <div class="role-badge">
-                Роль: 
-                {% if user.role == 'mentor' %}Наставник
-                {% elif user.role == 'staff' %}Сотрудник вуза
-                {% else %}Пользователь{% endif %}
-            </div>
+        
+        <p>Здравствуйте, <strong>{{ user.name }}</strong>!</p>
+        <p>Этот раздел сайта находится в разработке. Скоро здесь появится функционал для вашей роли.</p>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
