@@ -4,35 +4,13 @@
 
 {% block extra_css %}
 <style>
-    .request-link-container { text-align: center; margin-bottom: 20px; }
-    .btn-request { display: inline-block; background-color: #fff0f0; color: #8b0000; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: all 0.2s; border: 1px solid #8b0000; cursor: pointer; }
-    .btn-request:hover { background-color: #8b0000; color: white; }
-
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
-    .modal-content { background-color: #fefefe; margin: 5% auto; padding: 30px; border: 1px solid #888; width: 90%; max-width: 600px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; }
-    .close-btn { color: #aaa; position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
-    .close-btn:hover { color: #8b0000; }
-    .modal-content h2 { color: #8b0000; margin-top: 0; }
-    
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: bold; color: #555; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #8b0000; outline: none; }
-    .modal-content .btn-submit { width: 100%; padding: 12px; background-color: #8b0000; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    .modal-content .btn-submit:hover { background-color: #5a0000; }
-
-    .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-    .filter-group { display: flex; align-items: center; gap: 8px; }
-    .filter-group label { font-size: 14px; color: #555; font-weight: 500; }
-    .filters select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; cursor: pointer; }
-    
+    /* Стили для календаря (две колонки) */
     .content { display: flex; gap: 30px; flex-wrap: wrap; }
     .sidebar { flex: 1; min-width: 280px; border-right: 1px solid #eee; padding-right: 30px; }
     .program-list { list-style: none; padding: 0; margin: 0; }
     .program-list li { padding: 12px 15px; margin-bottom: 6px; background-color: #f9f9f9; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 14px; }
     .program-list li:hover { background-color: #fff0f0; border-left-color: #8b0000; color: #8b0000; }
     .program-list li.active { background-color: #8b0000; color: white; border-left-color: #5a0000; }
-
     .details { flex: 2.5; min-width: 400px; padding-left: 20px; }
     .detail-card { display: none; animation: fadeIn 0.3s ease; }
     .detail-card.active { display: block; }
@@ -42,46 +20,65 @@
     .info-value { font-weight: bold; color: #333; text-align: right; font-size: 15px; }
     .info-value.highlight { background-color: #fff0f0; color: #8b0000; padding: 2px 8px; border-radius: 4px; border: 1px solid #f0d0d0; }
     .no-results { display: none; color: #777; font-style: italic; padding: 20px; text-align: center; }
+
+    /* Фильтры */
+    .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-group { display: flex; align-items: center; gap: 8px; }
+    .filter-group label { font-size: 14px; color: #555; font-weight: 500; }
+    .filters select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; cursor: pointer; }
+
+    /* Кнопки сверху */
+    .top-actions { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+    .btn-add { background-color: #8b0000; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; }
+    .btn-add:hover { background-color: #a51c1c; }
+
+    /* Стили для заявок внизу */
+    .my-requests-block { margin-top: 40px; padding: 20px; background: #fdf2f2; border-radius: 8px; border: 1px solid #eee; }
+    .req-card { background: white; border: 1px solid #eee; padding: 20px; border-radius: 6px; margin-bottom: 15px; }
+    .req-card.pending { border-left: 4px solid #f57c00; }
+    .req-card.accepted { border-left: 4px solid #2e7d32; }
+    .req-card.rejected { border-left: 4px solid #c62828; }
+    .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; border: 1px solid; display: inline-block; }
+    .status-badge.pending { background: #fff3e0; color: #f57c00; border-color: #ffe0b2; }
+    .status-badge.accepted { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
+    .status-badge.rejected { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
+    .req-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .req-title { margin: 0; color: #333; font-size: 18px; }
+    .req-info { margin: 5px 0; font-size: 14px; color: #555; }
+    .req-desc { margin: 5px 0; font-size: 14px; color: #666; }
+
+    /* Модальное окно (жесткая фиксация) */
+    .modal { display: none; position: fixed !important; z-index: 9999 !important; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
+    .modal-content { background-color: #fefefe; margin: 5% auto; padding: 30px; border: 1px solid #888; width: 90%; max-width: 600px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; }
+    .close-btn { color: #aaa; position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
+    .close-btn:hover { color: #8b0000; }
+    .modal-content h2 { color: #8b0000; margin-top: 0; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: bold; color: #555; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #8b0000; outline: none; }
+    .modal-content .btn-submit { width: 100%; padding: 12px; background-color: #8b0000; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .modal-content .btn-submit:hover { background-color: #5a0000; }
+    
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 {% endblock %}
 
 {% block content %}
+<div id="events-data" data-events="{{ events_json|escape }}" style="display: none;"></div>
+
 <div class="container" style="padding: 30px;">
     <h1 style="text-align: center; color: #8b0000; margin-top: 0;">Календарь мероприятий</h1>
     <div style="text-align: center; color: #666; margin-bottom: 20px;">Режим просмотра для работодателей</div>
 
-    <div class="request-link-container">
-        <button class="btn-request" id="openModalBtn">✎ Оставить заявку на изменение / добавление</button>
+    <div class="top-actions">
+        <button id="openModalBtn" class="btn-add">✎ Оставить заявку на изменение / добавление</button>
     </div>
 
     <div class="filters">
-        <div class="filter-group">
-            <label for="filterFormat">Формат:</label>
-            <select id="filterFormat">
-                <option value="all">Все</option>
-                <option value="Офлайн">Офлайн</option>
-                <option value="Онлайн">Онлайн</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label for="filterType">Тип:</label>
-            <select id="filterType">
-                <option value="all">Все</option>
-                <option value="Лекция">Лекция</option>
-                <option value="Экскурсия">Экскурсия</option>
-                <option value="Олимпиада">Олимпиада</option>
-                <option value="Мастер-класс">Мастер-класс</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label for="filterOrg">Организатор:</label>
-            <select id="filterOrg">
-                <option value="all">Все</option>
-                <option value="uni">От вуза</option>
-                <option value="employer">От работодателей</option>
-            </select>
-        </div>
+        <div class="filter-group"><label>Формат:</label><select id="filterFormat"><option value="all">Все</option><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
+        <div class="filter-group"><label>Тип:</label><select id="filterType"><option value="all">Все</option><option value="Лекция">Лекция</option><option value="Экскурсия">Экскурсия</option><option value="Олимпиада">Олимпиада</option><option value="Мастер-класс">Мастер-класс</option></select></div>
+        <div class="filter-group"><label>Организатор:</label><select id="filterOrg"><option value="all">Все</option><option value="uni">От вуза</option><option value="employer">От работодателей</option></select></div>
     </div>
 
     <div class="content">
@@ -92,51 +89,57 @@
         <div class="details" id="detailsContainer"></div>
     </div>
 
-    <!-- Блок со статусами заявок работодателя -->
-    <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #eee;">
-        <h2 style="color: #8b0000; font-size: 22px;">Мои заявки</h2>
-        <div id="myRequestsList" style="display: flex; flex-direction: column; gap: 15px;">
-            <!-- Сюда будут выводиться заявки через JS -->
+    <!-- Блок "Мои заявки" -->
+    <div class="my-requests-block">
+        <h2 style="color: #8b0000; font-size: 22px; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 10px;">Мои заявки</h2>
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            {% for req in my_requests %}
+                <div class="req-card 
+                    {% if req.status == 'pending' %}pending
+                    {% elif req.status == 'accepted' %}accepted
+                    {% else %}rejected{% endif %}">
+                    <div class="req-header">
+                        <h3 class="req-title">{{ req.eventData.title }}</h3>
+                        <span class="status-badge 
+                            {% if req.status == 'pending' %}pending
+                            {% elif req.status == 'accepted' %}accepted
+                            {% else %}rejected{% endif %}">
+                            {% if req.status == 'pending' %}На рассмотрении
+                            {% elif req.status == 'accepted' %}Одобрено
+                            {% else %}Отклонено{% endif %}
+                        </span>
+                    </div>
+                    <p class="req-info"><strong>Дата:</strong> {{ req.eventData.date }} | <strong>Формат:</strong> {{ req.eventData.format }} | <strong>Тип:</strong> {{ req.eventData.type }} | <strong>Длительность:</strong> {{ req.eventData.time }}</p>
+                    <p class="req-desc">{{ req.eventData.desc }}</p>
+                </div>
+            {% empty %}
+                <p style="color: #999; font-style: italic;">Вы пока не отправляли заявок.</p>
+            {% endfor %}
         </div>
     </div>
 </div>
 
-<!-- Модальное окно для заявки -->
+<!-- Модальное окно заявки -->
 <div id="requestModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeModalBtn">&times;</span>
         <h2>Заявка вузу</h2>
         <p>Заполните поля, и вуз рассмотрит вашу заявку.</p>
-        <form id="requestForm">
-            <div class="form-group">
-                <label for="reqTitle">Название мероприятия</label>
-                <input type="text" id="reqTitle" required placeholder="Например: День открытых дверей">
-            </div>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create_request">
+            <div class="form-group"><label>Название</label><input type="text" name="title" required></div>
             <div class="form-group" style="display: flex; gap: 15px;">
-                <div style="flex: 1;"><label for="reqDate">Дата</label><input type="date" id="reqDate" required></div>
-                <div style="flex: 1;"><label for="reqFormat">Формат</label><select id="reqFormat" required><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
+                <div style="flex: 1;"><label>Дата</label><input type="date" name="date" required></div>
+                <div style="flex: 1;"><label>Формат</label><select name="format"><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
             </div>
-            <div class="form-group">
-                <label for="reqType">Тип мероприятия</label>
-                <select id="reqType" required>
-                    <option value="Лекция">Лекция</option>
-                    <option value="Экскурсия">Экскурсия</option>
-                    <option value="Олимпиада">Олимпиада</option>
-                    <option value="Мастер-класс">Мастер-класс</option>
-                </select>
-            </div>
+            <div class="form-group"><label>Тип</label><select name="type"><option value="Лекция">Лекция</option><option value="Экскурсия">Экскурсия</option><option value="Олимпиада">Олимпиада</option><option value="Мастер-класс">Мастер-класс</option></select></div>
             <div class="form-group" style="display: flex; gap: 15px;">
-                <div style="flex: 1;"><label for="reqTime">Длительность</label><input type="text" id="reqTime" required placeholder="2 ч. 30 мин."></div>
-                <div style="flex: 1;"><label for="reqOrg">Ваша организация</label><input type="text" id="reqOrg" required placeholder="ООО Ромашка"></div>
+                <div style="flex: 1;"><label>Длительность</label><input type="text" name="time" required placeholder="2 ч. 30 мин."></div>
+                <div style="flex: 1;"><label>Организация</label><input type="text" name="org" required placeholder="ООО Ромашка"></div>
             </div>
-            <div class="form-group">
-                <label for="reqAddress">Адрес (если онлайн - пусто)</label>
-                <input type="text" id="reqAddress" placeholder="г. Тула, пр. Ленина, д. 92">
-            </div>
-            <div class="form-group">
-                <label for="reqDesc">Описание</label>
-                <textarea id="reqDesc" rows="3" required placeholder="Подробности..."></textarea>
-            </div>
+            <div class="form-group"><label>Адрес</label><input type="text" name="address" placeholder="г. Тула, пр. Ленина, д. 92"></div>
+            <div class="form-group"><label>Описание</label><textarea name="desc" rows="3" required></textarea></div>
             <button type="submit" class="btn-submit">Отправить заявку</button>
         </form>
     </div>
@@ -145,157 +148,86 @@
 
 {% block extra_js %}
 <script>
-    let defaultEvents = [
-        { id: 1, title: 'Олимпиада по информатике', date: '2026-04-15', format: 'Офлайн', type: 'Олимпиада', orgType: 'uni', time: '3 ч. 00 мин.', org: 'Приемная комиссия ТулГУ', address: 'г. Тула, пр. Ленина, д. 92', desc: 'Проверьте свои знания в области программирования.' },
-        { id: 2, title: 'Ярмарка вакансий "Карьера 2026"', date: '2026-05-20', format: 'Офлайн', type: 'Лекция', orgType: 'uni', time: '4 ч. 00 мин.', org: 'Центр карьеры ТулГУ', address: 'г. Тула, ул. Ф. Энгельса, д. 155', desc: 'Крупнейшее карьерное событие региона.' },
-        { id: 3, title: 'Мастер-класс по IT', date: '2026-06-10', format: 'Онлайн', type: 'Мастер-класс', orgType: 'employer', time: '1 ч. 30 мин.', org: 'Компания "СберТех"', address: '—', desc: 'Современные подходы к разработке на Python.' }
-    ];
-
-    let eventsData = JSON.parse(localStorage.getItem('tulgu_events')) || defaultEvents;
-    const programList = document.getElementById('programList');
-    const detailsContainer = document.getElementById('detailsContainer');
-    const noResults = document.getElementById('noResults');
-    const filterFormatSelect = document.getElementById('filterFormat');
-    const filterTypeSelect = document.getElementById('filterType');
-    const filterOrgSelect = document.getElementById('filterOrg');
-
-    // Модальное окно
-    const modal = document.getElementById('requestModal');
-    document.getElementById('openModalBtn').onclick = () => modal.style.display = 'block';
-    document.getElementById('closeModalBtn').onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
-
-    document.getElementById('requestForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const newRequest = {
-            id: Date.now(),
-            dateSubmitted: new Date().toLocaleString('ru-RU'),
-            status: 'pending',
-            eventData: {
-                title: document.getElementById('reqTitle').value,
-                date: document.getElementById('reqDate').value,
-                format: document.getElementById('reqFormat').value,
-                type: document.getElementById('reqType').value,
-                time: document.getElementById('reqTime').value,
-                org: document.getElementById('reqOrg').value,
-                orgType: 'employer', 
-                address: document.getElementById('reqAddress').value || '—',
-                desc: document.getElementById('reqDesc').value
-            }
-        };
-        let requests = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
-        requests.push(newRequest);
-        localStorage.setItem('tulgu_requests', JSON.stringify(requests));
-        alert('Заявка отправлена вузу!');
-        document.getElementById('requestForm').reset();
-        modal.style.display = 'none';
+    document.addEventListener("DOMContentLoaded", function() {
+        const dataElement = document.getElementById('events-data');
+        if (!dataElement) return;
         
-        // Обновляем список заявок сразу после отправки
-        renderMyRequests(); 
-    });
-
-    function getOrgType(event) { return event.orgType || 'uni'; }
-
-    function renderSite() {
-        programList.innerHTML = '';
-        detailsContainer.innerHTML = '';
-        if (eventsData.length === 0) { noResults.classList.add('show'); return; } else { noResults.classList.remove('show'); }
-
-        const formatFilter = filterFormatSelect.value;
-        const typeFilter = filterTypeSelect.value;
-        const orgFilter = filterOrgSelect.value;
-
-        const filteredEvents = eventsData.filter(ev => {
-            const matchFormat = (formatFilter === 'all' || ev.format === formatFilter);
-            const matchType = (typeFilter === 'all' || ev.type === typeFilter);
-            const matchOrg = (orgFilter === 'all' || getOrgType(ev) === orgFilter);
-            return matchFormat && matchType && matchOrg;
-        });
-
-        if (filteredEvents.length === 0) { noResults.classList.add('show'); return; }
-
-        filteredEvents.forEach((event, index) => {
-            const li = document.createElement('li');
-            li.textContent = event.title;
-            if (index === 0) li.classList.add('active');
-            li.addEventListener('click', function() {
-                document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelectorAll('.detail-card').forEach(el => el.classList.remove('active'));
-                document.getElementById(`card-${event.id}`).classList.add('active');
-            });
-            programList.appendChild(li);
-
-            const card = document.createElement('div');
-            card.className = `detail-card ${index === 0 ? 'active' : ''}`;
-            card.id = `card-${event.id}`;
-            let formattedDate = event.date;
-            try { formattedDate = new Date(event.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); } catch(e) {}
-
-            card.innerHTML = `
-                <h2>${event.title}</h2>
-                <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">${event.org}</span></div>
-                <div class="info-row"><span class="info-label">Дата:</span><span class="info-value">${formattedDate}</span></div>
-                <div class="info-row"><span class="info-label">Тип:</span><span class="info-value">${event.type}</span></div>
-                <div class="info-row"><span class="info-label">Формат:</span><span class="info-value highlight">${event.format}</span></div>
-                <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
-                <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc || '—'}</span></div>
-            `;
-            detailsContainer.appendChild(card);
-        });
-    }
-
-    // --- Функция для отображения заявок работодателя и их статусов ---
-    function renderMyRequests() {
-        const list = document.getElementById('myRequestsList');
-        if (!list) return;
-        
-        let requests = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
-        // Фильтруем только заявки от работодателей
-        const myRequests = requests.filter(r => r.eventData.orgType === 'employer');
-
-        list.innerHTML = '';
-
-        if (myRequests.length === 0) {
-            list.innerHTML = '<p style="color: #999; font-style: italic;">Вы пока не отправляли заявок.</p>';
+        let eventsData = [];
+        try {
+            eventsData = JSON.parse(dataElement.dataset.events || '[]');
+        } catch (e) {
+            console.error("Ошибка парсинга JSON", e);
             return;
         }
 
-        myRequests.forEach(req => {
-            const ev = req.eventData;
-            let statusText = '';
-            let statusColor = '';
+        const programList = document.getElementById('programList');
+        const detailsContainer = document.getElementById('detailsContainer');
+        const noResults = document.getElementById('noResults');
+        const filterFormatSelect = document.getElementById('filterFormat');
+        const filterTypeSelect = document.getElementById('filterType');
+        const filterOrgSelect = document.getElementById('filterOrg');
 
-            if (req.status === 'pending') {
-                statusText = 'На рассмотрении';
-                statusColor = '#f57c00';
-            } else if (req.status === 'accepted') {
-                statusText = 'Одобрено';
-                statusColor = '#2e7d32';
-            } else if (req.status === 'rejected') {
-                statusText = 'Отклонено';
-                statusColor = '#c62828';
-            }
+        const modal = document.getElementById('requestModal');
+        document.getElementById('openModalBtn').onclick = () => modal.style.display = 'block';
+        document.getElementById('closeModalBtn').onclick = () => modal.style.display = 'none';
+        window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
 
-            const div = document.createElement('div');
-            div.style.cssText = 'background: #fafafa; border: 1px solid #eee; border-left: 4px solid ' + statusColor + '; padding: 15px; border-radius: 6px;';
-            div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h3 style="margin: 0; color: #333; font-size: 18px;">${ev.title}</h3>
-                    <span style="background: ${statusColor}20; color: ${statusColor}; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; border: 1px solid ${statusColor}40;">${statusText}</span>
-                </div>
-                <p style="margin: 5px 0; font-size: 14px; color: #555;"><strong>Дата:</strong> ${ev.date} | <strong>Формат:</strong> ${ev.format} | <strong>Тип:</strong> ${ev.type}</p>
-                <p style="margin: 5px 0; font-size: 14px; color: #666;">${ev.desc}</p>
-            `;
-            list.appendChild(div);
-        });
-    }
+        function getOrgType(event) { return event.orgType || 'uni'; }
 
-    filterFormatSelect.addEventListener('change', renderSite);
-    filterTypeSelect.addEventListener('change', renderSite);
-    filterOrgSelect.addEventListener('change', renderSite);
-    
-    renderSite();
-    renderMyRequests(); // Вызываем при загрузке страницы
+        function renderSite() {
+            programList.innerHTML = '';
+            detailsContainer.innerHTML = '';
+            if (eventsData.length === 0) { noResults.classList.add('show'); return; } else { noResults.classList.remove('show'); }
+
+            const formatFilter = filterFormatSelect.value;
+            const typeFilter = filterTypeSelect.value;
+            const orgFilter = filterOrgSelect.value;
+
+            const filteredEvents = eventsData.filter(ev => {
+                const matchFormat = (formatFilter === 'all' || ev.format === formatFilter);
+                const matchType = (typeFilter === 'all' || ev.type === typeFilter);
+                const matchOrg = (orgFilter === 'all' || getOrgType(ev) === orgFilter);
+                return matchFormat && matchType && matchOrg;
+            });
+
+            if (filteredEvents.length === 0) { noResults.classList.add('show'); return; }
+
+            filteredEvents.forEach((event, index) => {
+                const li = document.createElement('li');
+                li.textContent = event.title;
+                if (index === 0) li.classList.add('active');
+                li.addEventListener('click', function() {
+                    document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.detail-card').forEach(el => el.classList.remove('active'));
+                    document.getElementById(`card-${event.id}`).classList.add('active');
+                });
+                programList.appendChild(li);
+
+                const card = document.createElement('div');
+                card.className = `detail-card ${index === 0 ? 'active' : ''}`;
+                card.id = `card-${event.id}`;
+                let formattedDate = event.date;
+                try { formattedDate = new Date(event.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); } catch(e) {}
+
+                card.innerHTML = `
+                    <h2>${event.title}</h2>
+                    <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">${event.org}</span></div>
+                    <div class="info-row"><span class="info-label">Дата:</span><span class="info-value">${formattedDate}</span></div>
+                    <div class="info-row"><span class="info-label">Тип:</span><span class="info-value">${event.type}</span></div>
+                    <div class="info-row"><span class="info-label">Формат:</span><span class="info-value highlight">${event.format}</span></div>
+                    <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">${event.time || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc || '—'}</span></div>
+                `;
+                detailsContainer.appendChild(card);
+            });
+        }
+
+        filterFormatSelect.addEventListener('change', renderSite);
+        filterTypeSelect.addEventListener('change', renderSite);
+        filterOrgSelect.addEventListener('change', renderSite);
+        renderSite();
+    });
 </script>
 {% endblock %}

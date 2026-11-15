@@ -4,54 +4,13 @@
 
 {% block extra_css %}
 <style>
-    .admin-link-container { text-align: center; margin-bottom: 20px; }
-    .btn-admin { display: inline-block; background-color: #8b0000; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: background 0.2s; box-shadow: 0 4px 6px rgba(139, 0, 0, 0.2); }
-    .btn-admin:hover { background-color: #5a0000; }
-
-    .notifications-panel { background: #fafafa; border: 1px solid #eee; border-left: 4px solid #8b0000; border-radius: 8px; padding: 20px; margin-bottom: 30px; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-    .notifications-panel.active { display: block; animation: fadeIn 0.3s ease; }
-    .notifications-panel h2 { margin-top: 0; color: #8b0000; font-size: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-    
-    .notification-item { background: white; border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .notification-item h4 { margin: 0 0 5px 0; color: #333; font-size: 16px; }
-    .notification-item .req-details { font-size: 13px; color: #555; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px; }
-    .notification-item .req-details span { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; }
-    .notification-item .req-org { font-weight: bold; color: #8b0000; font-size: 14px; margin-bottom: 10px; }
-    .notification-actions { display: flex; gap: 10px; }
-    .btn-accept, .btn-reject { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; transition: background 0.2s; }
-    .btn-accept { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
-    .btn-accept:hover { background-color: #bbdefb; }
-    .btn-reject { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
-    .btn-reject:hover { background-color: #ffcdd2; }
-
-    /* Кнопка удаления мероприятия */
-    .btn-delete-event {
-        background-color: #ffebee;
-        color: #c62828;
-        border: 1px solid #ffcdd2;
-        padding: 8px 15px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 13px;
-        transition: background 0.2s;
-        margin-top: 15px;
-        display: inline-block;
-    }
-    .btn-delete-event:hover { background-color: #ffcdd2; }
-
-    .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-    .filter-group { display: flex; align-items: center; gap: 8px; }
-    .filter-group label { font-size: 14px; color: #555; font-weight: 500; }
-    .filters select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; cursor: pointer; }
-    
+    /* ===== СТИЛИ ДЛЯ КАЛЕНДАРЯ ===== */
     .content { display: flex; gap: 30px; flex-wrap: wrap; }
     .sidebar { flex: 1; min-width: 280px; border-right: 1px solid #eee; padding-right: 30px; }
     .program-list { list-style: none; padding: 0; margin: 0; }
     .program-list li { padding: 12px 15px; margin-bottom: 6px; background-color: #f9f9f9; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 14px; }
     .program-list li:hover { background-color: #fff0f0; border-left-color: #8b0000; color: #8b0000; }
     .program-list li.active { background-color: #8b0000; color: white; border-left-color: #5a0000; }
-
     .details { flex: 2.5; min-width: 400px; padding-left: 20px; }
     .detail-card { display: none; animation: fadeIn 0.3s ease; }
     .detail-card.active { display: block; }
@@ -61,48 +20,179 @@
     .info-value { font-weight: bold; color: #333; text-align: right; font-size: 15px; }
     .info-value.highlight { background-color: #fff0f0; color: #8b0000; padding: 2px 8px; border-radius: 4px; border: 1px solid #f0d0d0; }
     .no-results { display: none; color: #777; font-style: italic; padding: 20px; text-align: center; }
+    
+    .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-group { display: flex; align-items: center; gap: 8px; }
+    .filter-group label { font-size: 14px; color: #555; font-weight: 500; }
+    .filters select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; cursor: pointer; }
+
+    .top-actions { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+    .btn-add { background-color: #8b0000; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; }
+    .btn-add:hover { background-color: #a51c1c; }
+
+    /* ===== СТИЛИ ДЛЯ УВЕДОМЛЕНИЙ (ЗАЯВОК) ===== */
+    .notifications-panel {
+        background: #fdf2f2;
+        border: 1px solid #eee;
+        border-left: 4px solid #8b0000;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .notifications-panel h2 {
+        margin-top: 0;
+        color: #8b0000;
+        font-size: 20px;
+        border-bottom: 2px solid #8b0000;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    .notification-item {
+        background: white;
+        border: 1px solid #eee;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        border-left: 4px solid #f57c00; /* Оранжевая полоса */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .notification-item h4 {
+        margin: 0 0 10px 0;
+        color: #333;
+        font-size: 18px;
+    }
+    .req-details {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .req-details span {
+        background: #f4f4f4;
+        padding: 4px 10px;
+        border-radius: 4px;
+        color: #333;
+    }
+    .notification-actions {
+        display: flex;
+        gap: 10px;
+    }
+    .btn-accept, .btn-reject {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    .btn-accept {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+    .btn-accept:hover { background-color: #c8e6c9; }
+    .btn-reject {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+    .btn-reject:hover { background-color: #ffcdd2; }
+
+    /* Стили для выпадающего описания заявки */
+    .req-desc-toggle {
+        margin-top: 10px;
+        cursor: pointer;
+        color: #8b0000;
+        font-weight: bold;
+        font-size: 14px;
+        display: inline-block;
+        user-select: none;
+    }
+    .req-desc-toggle:hover { text-decoration: underline; }
+    .req-desc-content {
+        display: none;
+        margin-top: 10px;
+        padding: 10px;
+        background: #fafafa;
+        border-left: 2px solid #8b0000;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    /* ===== СТИЛИ ДЛЯ МОДАЛЬНЫХ ОКОН ===== */
+    .modal { display: none; position: fixed !important; z-index: 9999 !important; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
+    .modal-content { background-color: #fefefe; margin: 5% auto; padding: 30px; border: 1px solid #888; width: 90%; max-width: 600px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; }
+    .close-btn { color: #aaa; position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
+    .close-btn:hover { color: #8b0000; }
+    .modal-content h2 { color: #8b0000; margin-top: 0; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: bold; color: #555; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #8b0000; outline: none; }
+    .modal-content .btn-submit { width: 100%; padding: 12px; background-color: #8b0000; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .modal-content .btn-submit:hover { background-color: #5a0000; }
+
+    .action-buttons { display: flex; gap: 10px; margin-top: 15px; }
+    .btn-edit-event, .btn-delete-event { padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; border: 1px solid; }
+    .btn-edit-event { background-color: #f4f4f4; color: #333; border-color: #ddd; }
+    .btn-delete-event { background-color: #ffebee; color: #c62828; border-color: #ffcdd2; }
+
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 {% endblock %}
 
 {% block content %}
+<div id="events-data" data-events="{{ events_json|escape }}" style="display: none;"></div>
+
 <div class="container" style="padding: 30px;">
     <h1 style="text-align: center; color: #8b0000; margin-top: 0;">Календарь мероприятий</h1>
-    <div style="text-align: center; color: #666; margin-bottom: 20px;">Режим просмотра для сотрудников вуза</div>
+    <div style="text-align: center; color: #666; margin-bottom: 20px;">Режим управления для сотрудников вуза</div>
 
-    <!-- Блок уведомлений -->
-    <div class="notifications-panel" id="notificationsPanel">
-        <h2>Заявки от работодателей</h2>
-        <div id="notificationsList"></div>
+    <div class="top-actions">
+        <button id="openAddModalBtn" class="btn-add">✎ Добавить мероприятие</button>
     </div>
 
+    {% if requests %}
+    <div class="notifications-panel">
+        <h2>Заявки от работодателей</h2>
+        {% for req in requests %}
+        <div class="notification-item">
+            <h4>{{ req.eventData.title }}</h4>
+            <div class="req-details">
+                <span>Организация: {{ req.eventData.org }}</span>
+                <span>Тип: {{ req.eventData.type }}</span>
+                <span>Формат: {{ req.eventData.format }}</span>
+                <span>Длительность: {{ req.eventData.time }}</span>
+                <span>Дата: {{ req.eventData.date }}</span>
+            </div>
+            
+            <!-- Выпадающее описание -->
+            <div class="req-desc-toggle" onclick="toggleDesc(this)">Показать описание</div>
+            <div class="req-desc-content">{{ req.eventData.desc }}</div>
+
+            <div class="notification-actions" style="margin-top: 15px;">
+                <form method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_id" value="{{ req.id }}">
+                    <button type="submit" name="action" value="accept_request" class="btn-accept">Принять</button>
+                    <button type="submit" name="action" value="reject_request" class="btn-reject">Отклонить</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="filters">
-        <div class="filter-group">
-            <label for="filterFormat">Формат:</label>
-            <select id="filterFormat">
-                <option value="all">Все</option>
-                <option value="Офлайн">Офлайн</option>
-                <option value="Онлайн">Онлайн</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label for="filterType">Тип:</label>
-            <select id="filterType">
-                <option value="all">Все</option>
-                <option value="Лекция">Лекция</option>
-                <option value="Экскурсия">Экскурсия</option>
-                <option value="Олимпиада">Олимпиада</option>
-                <option value="Мастер-класс">Мастер-класс</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label for="filterOrg">Организатор:</label>
-            <select id="filterOrg">
-                <option value="all">Все</option>
-                <option value="uni">От вуза</option>
-                <option value="employer">От работодателей</option>
-            </select>
-        </div>
+        <div class="filter-group"><label>Формат:</label><select id="filterFormat"><option value="all">Все</option><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
+        <div class="filter-group"><label>Тип:</label><select id="filterType"><option value="all">Все</option><option value="Лекция">Лекция</option><option value="Экскурсия">Экскурсия</option><option value="Олимпиада">Олимпиада</option><option value="Мастер-класс">Мастер-класс</option></select></div>
+        <div class="filter-group"><label>Организатор:</label><select id="filterOrg"><option value="all">Все</option><option value="uni">От вуза</option><option value="employer">От работодателей</option></select></div>
     </div>
 
     <div class="content">
@@ -113,151 +203,188 @@
         <div class="details" id="detailsContainer"></div>
     </div>
 </div>
+
+<!-- Модалка добавления -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeAddModalBtn">&times;</span>
+        <h2>Добавить мероприятие</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add_event">
+            <div class="form-group"><label>Название</label><input type="text" name="title" required></div>
+            <div class="form-group" style="display: flex; gap: 15px;">
+                <div style="flex: 1;"><label>Дата</label><input type="date" name="date" required></div>
+                <div style="flex: 1;"><label>Формат</label><select name="format"><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
+            </div>
+            <div class="form-group"><label>Тип</label><select name="type"><option value="Лекция">Лекция</option><option value="Экскурсия">Экскурсия</option><option value="Олимпиада">Олимпиада</option><option value="Мастер-класс">Мастер-класс</option></select></div>
+            <div class="form-group" style="display: flex; gap: 15px;">
+                <div style="flex: 1;"><label>Длительность</label><input type="text" name="time" required placeholder="2 ч. 30 мин."></div>
+                <div style="flex: 1;"><label>Организатор</label><input type="text" name="org" required placeholder="ТулГУ"></div>
+            </div>
+            <div class="form-group"><label>Адрес</label><input type="text" name="address" placeholder="г. Тула, пр. Ленина, д. 92"></div>
+            <div class="form-group"><label>Описание</label><textarea name="desc" rows="3" required></textarea></div>
+            <button type="submit" class="btn-submit">Добавить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модалка редактирования -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeEditModalBtn">&times;</span>
+        <h2>Редактировать</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit_event">
+            <input type="hidden" name="event_id" id="editEventId">
+            <div class="form-group"><label>Название</label><input type="text" name="title" id="editTitle" required></div>
+            <div class="form-group" style="display: flex; gap: 15px;">
+                <div style="flex: 1;"><label>Дата</label><input type="date" name="date" id="editDate" required></div>
+                <div style="flex: 1;"><label>Формат</label><select name="format" id="editFormat"><option value="Офлайн">Офлайн</option><option value="Онлайн">Онлайн</option></select></div>
+            </div>
+            <div class="form-group"><label>Тип</label><select name="type" id="editType"><option value="Лекция">Лекция</option><option value="Экскурсия">Экскурсия</option><option value="Олимпиада">Олимпиада</option><option value="Мастер-класс">Мастер-класс</option></select></div>
+            <div class="form-group" style="display: flex; gap: 15px;">
+                <div style="flex: 1;"><label>Длительность</label><input type="text" name="time" id="editTime" required></div>
+                <div style="flex: 1;"><label>Организатор</label><input type="text" name="org" id="editOrg" required></div>
+            </div>
+            <div class="form-group"><label>Адрес</label><input type="text" name="address" id="editAddress"></div>
+            <div class="form-group"><label>Описание</label><textarea name="desc" id="editDesc" rows="3" required></textarea></div>
+            <button type="submit" class="btn-submit">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    let defaultEvents = [
-        { id: 1, title: 'Олимпиада по информатике', date: '2026-04-15', format: 'Офлайн', type: 'Олимпиада', orgType: 'uni', time: '3 ч. 00 мин.', org: 'Приемная комиссия ТулГУ', address: 'г. Тула, пр. Ленина, д. 92', desc: 'Проверьте свои знания в области программирования.' },
-        { id: 2, title: 'Ярмарка вакансий "Карьера 2026"', date: '2026-05-20', format: 'Офлайн', type: 'Лекция', orgType: 'uni', time: '4 ч. 00 мин.', org: 'Центр карьеры ТулГУ', address: 'г. Тула, ул. Ф. Энгельса, д. 155', desc: 'Крупнейшее карьерное событие региона.' },
-        { id: 3, title: 'Мастер-класс по IT', date: '2026-06-10', format: 'Онлайн', type: 'Мастер-класс', orgType: 'employer', time: '1 ч. 30 мин.', org: 'Компания "СберТех"', address: '—', desc: 'Современные подходы к разработке на Python.' }
-    ];
-
-    let eventsData = JSON.parse(localStorage.getItem('tulgu_events')) || defaultEvents;
-    let requestsData = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
-
-    const programList = document.getElementById('programList');
-    const detailsContainer = document.getElementById('detailsContainer');
-    const noResults = document.getElementById('noResults');
-    const filterFormatSelect = document.getElementById('filterFormat');
-    const filterTypeSelect = document.getElementById('filterType');
-    const filterOrgSelect = document.getElementById('filterOrg');
-
-    // --- Логика уведомлений ---
-    function renderNotifications() {
-        const pending = requestsData.filter(r => r.status === 'pending');
-        const panel = document.getElementById('notificationsPanel');
-        const list = document.getElementById('notificationsList');
-        
-        list.innerHTML = '';
-        if (pending.length === 0) { panel.classList.remove('active'); return; }
-        panel.classList.add('active');
-        
-        pending.forEach(req => {
-            const ev = req.eventData;
-            const div = document.createElement('div');
-            div.className = 'notification-item';
-            div.innerHTML = `
-                <h4>${ev.title}</h4>
-                <div class="req-org">Организация: ${ev.org}</div>
-                <div class="req-details">
-                    <span>Тип: ${ev.type}</span>
-                    <span>Формат: ${ev.format}</span>
-                    <span>Дата: ${new Date(ev.date).toLocaleDateString('ru-RU')}</span>
-                </div>
-                <div class="notification-actions">
-                    <button class="btn-accept" onclick="acceptRequest(${req.id})">Принять</button>
-                    <button class="btn-reject" onclick="rejectRequest(${req.id})">Отклонить</button>
-                </div>
-            `;
-            list.appendChild(div);
-        });
+    // Функция для открытия/закрытия описания заявки (глобальная, чтобы работал onclick)
+    function toggleDesc(element) {
+        const content = element.nextElementSibling;
+        if (content.style.display === 'block') {
+            content.style.display = 'none';
+            element.textContent = 'Показать описание';
+        } else {
+            content.style.display = 'block';
+            element.textContent = 'Скрыть описание';
+        }
     }
 
-    window.acceptRequest = (id) => {
-        let requests = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
-        const reqIndex = requests.findIndex(r => r.id === id);
-        if (reqIndex === -1) return;
-        const req = requests[reqIndex];
-        eventsData.push({ ...req.eventData, id: Date.now() });
-        localStorage.setItem('tulgu_events', JSON.stringify(eventsData));
-        requests[reqIndex].status = 'accepted';
-        localStorage.setItem('tulgu_requests', JSON.stringify(requests));
-        requestsData = requests;
-        renderNotifications();
-        renderSite();
-        alert('Мероприятие добавлено!');
-    };
-
-    window.rejectRequest = (id) => {
-        let requests = JSON.parse(localStorage.getItem('tulgu_requests')) || [];
-        const idx = requests.findIndex(r => r.id === id);
-        if (idx === -1) return;
-        requests[idx].status = 'rejected';
-        localStorage.setItem('tulgu_requests', JSON.stringify(requests));
-        requestsData = requests;
-        renderNotifications();
-    };
-
-    // --- Удаление мероприятия ---
-    window.deleteEvent = (id) => {
-        if (!confirm('Вы уверены, что хотите удалить это мероприятие?')) return;
+    document.addEventListener("DOMContentLoaded", function() {
+        // Данные передаются из Django
+        const dataElement = document.getElementById('events-data');
+        if (!dataElement) return;
         
-        // Удаляем из массива
-        eventsData = eventsData.filter(ev => ev.id !== id);
-        // Сохраняем в localStorage
-        localStorage.setItem('tulgu_events', JSON.stringify(eventsData));
-        // Перерисовываем страницу
-        renderSite();
-    };
+        let eventsData = [];
+        try {
+            eventsData = JSON.parse(dataElement.dataset.events || '[]');
+        } catch (e) {
+            console.error("Ошибка парсинга JSON", e);
+            return;
+        }
 
-    function getOrgType(event) { return event.orgType || 'uni'; }
+        const programList = document.getElementById('programList');
+        const detailsContainer = document.getElementById('detailsContainer');
+        const noResults = document.getElementById('noResults');
+        const filterFormatSelect = document.getElementById('filterFormat');
+        const filterTypeSelect = document.getElementById('filterType');
+        const filterOrgSelect = document.getElementById('filterOrg');
+        
+        const addModal = document.getElementById('addModal');
+        const editModal = document.getElementById('editModal');
 
-    function renderSite() {
-        programList.innerHTML = '';
-        detailsContainer.innerHTML = '';
-        if (eventsData.length === 0) { noResults.classList.add('show'); return; } else { noResults.classList.remove('show'); }
+        // Управление модальными окнами
+        document.getElementById('openAddModalBtn').onclick = () => { addModal.style.display = 'block'; };
+        document.getElementById('closeAddModalBtn').onclick = () => { addModal.style.display = 'none'; };
+        document.getElementById('closeEditModalBtn').onclick = () => { editModal.style.display = 'none'; };
+        window.onclick = (e) => { 
+            if (e.target == addModal) addModal.style.display = 'none'; 
+            if (e.target == editModal) editModal.style.display = 'none'; 
+        };
 
-        const formatFilter = filterFormatSelect.value;
-        const typeFilter = filterTypeSelect.value;
-        const orgFilter = filterOrgSelect.value;
+        // Открытие модалки редактирования
+        window.openEditModal = (id) => {
+            const event = eventsData.find(ev => ev.id === id);
+            if (!event) return;
+            document.getElementById('editEventId').value = event.id;
+            document.getElementById('editTitle').value = event.title;
+            document.getElementById('editDate').value = event.date;
+            document.getElementById('editFormat').value = event.format;
+            document.getElementById('editType').value = event.type;
+            document.getElementById('editTime').value = event.time;
+            document.getElementById('editOrg').value = event.org;
+            document.getElementById('editAddress').value = event.address === '—' ? '' : event.address;
+            document.getElementById('editDesc').value = event.desc;
+            editModal.style.display = 'block';
+        };
 
-        const filteredEvents = eventsData.filter(ev => {
-            const matchFormat = (formatFilter === 'all' || ev.format === formatFilter);
-            const matchType = (typeFilter === 'all' || ev.type === typeFilter);
-            const matchOrg = (orgFilter === 'all' || getOrgType(ev) === orgFilter);
-            return matchFormat && matchType && matchOrg;
-        });
+        function getOrgType(event) { return event.orgType || 'uni'; }
 
-        if (filteredEvents.length === 0) { noResults.classList.add('show'); return; }
+        function renderSite() {
+            programList.innerHTML = '';
+            detailsContainer.innerHTML = '';
+            if (eventsData.length === 0) { noResults.classList.add('show'); return; } else { noResults.classList.remove('show'); }
 
-        filteredEvents.forEach((event, index) => {
-            const li = document.createElement('li');
-            li.textContent = event.title;
-            if (index === 0) li.classList.add('active');
-            li.addEventListener('click', function() {
-                document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelectorAll('.detail-card').forEach(el => el.classList.remove('active'));
-                document.getElementById(`card-${event.id}`).classList.add('active');
+            const formatFilter = filterFormatSelect.value;
+            const typeFilter = filterTypeSelect.value;
+            const orgFilter = filterOrgSelect.value;
+
+            const filteredEvents = eventsData.filter(ev => {
+                const matchFormat = (formatFilter === 'all' || ev.format === formatFilter);
+                const matchType = (typeFilter === 'all' || ev.type === typeFilter);
+                const matchOrg = (orgFilter === 'all' || getOrgType(ev) === orgFilter);
+                return matchFormat && matchType && matchOrg;
             });
-            programList.appendChild(li);
 
-            const card = document.createElement('div');
-            card.className = `detail-card ${index === 0 ? 'active' : ''}`;
-            card.id = `card-${event.id}`;
-            let formattedDate = event.date;
-            try { formattedDate = new Date(event.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); } catch(e) {}
+            if (filteredEvents.length === 0) { noResults.classList.add('show'); return; }
 
-            card.innerHTML = `
-                <h2>${event.title}</h2>
-                <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">${event.org}</span></div>
-                <div class="info-row"><span class="info-label">Дата:</span><span class="info-value">${formattedDate}</span></div>
-                <div class="info-row"><span class="info-label">Тип:</span><span class="info-value">${event.type}</span></div>
-                <div class="info-row"><span class="info-label">Формат:</span><span class="info-value highlight">${event.format}</span></div>
-                <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
-                <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc || '—'}</span></div>
-                <button class="btn-delete-event" onclick="deleteEvent(${event.id})">Удалить мероприятие</button>
-            `;
-            detailsContainer.appendChild(card);
-        });
-    }
+            filteredEvents.forEach((event, index) => {
+                const li = document.createElement('li');
+                li.textContent = event.title;
+                if (index === 0) li.classList.add('active');
+                li.addEventListener('click', function() {
+                    document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.detail-card').forEach(el => el.classList.remove('active'));
+                    document.getElementById(`card-${event.id}`).classList.add('active');
+                });
+                programList.appendChild(li);
 
-    filterFormatSelect.addEventListener('change', renderSite);
-    filterTypeSelect.addEventListener('change', renderSite);
-    filterOrgSelect.addEventListener('change', renderSite);
-    
-    renderSite();
-    renderNotifications();
+                const card = document.createElement('div');
+                card.className = `detail-card ${index === 0 ? 'active' : ''}`;
+                card.id = `card-${event.id}`;
+                let formattedDate = event.date;
+                try { formattedDate = new Date(event.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); } catch(e) {}
+
+                card.innerHTML = `
+                    <h2>${event.title}</h2>
+                    <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">${event.org}</span></div>
+                    <div class="info-row"><span class="info-label">Дата:</span><span class="info-value">${formattedDate}</span></div>
+                    <div class="info-row"><span class="info-label">Тип:</span><span class="info-value">${event.type}</span></div>
+                    <div class="info-row"><span class="info-label">Формат:</span><span class="info-value highlight">${event.format}</span></div>
+                    <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">${event.time || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc || '—'}</span></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-edit-event" onclick="openEditModal(${event.id})">Редактировать</button>
+                        <form method="POST" style="display:inline; margin:0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete_event">
+                            <input type="hidden" name="event_id" value="${event.id}">
+                            <button type="submit" class="btn-delete-event" onclick="return confirm('Удалить мероприятие?')">Удалить</button>
+                        </form>
+                    </div>
+                `;
+                detailsContainer.appendChild(card);
+            });
+        }
+
+        filterFormatSelect.addEventListener('change', renderSite);
+        filterTypeSelect.addEventListener('change', renderSite);
+        filterOrgSelect.addEventListener('change', renderSite);
+        
+        renderSite();
+    });
 </script>
 {% endblock %}
