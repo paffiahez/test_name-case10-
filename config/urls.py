@@ -9,13 +9,12 @@ from catalog.views import login_view, logout_view, dashboard_view, profile_view,
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # Корень сайта - это ВСЕГДА страница входа (логин)    
-    path('login_view/', login_view, name='login'),
+    # Корень сайта - это ВСЕГДА страница входа (логин)    path('', login_view, name='login'),
     
     # Дублирующий маршрут для /login/ (чтобы не было 404)
     path('login/', login_view, name='login_page'),
     
-    path('dashboard/', dashboard_view, name='dashboard'),
+    path('', dashboard_view, name='dashboard'),
     
     # Профиль и чат
     path('profile/', profile_view, name='profile'),
