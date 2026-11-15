@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Договоры — ТулГУ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contract-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    .contract-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: white;
+        border: 1px solid #eee;
+        border-left: 4px solid #8b0000;
+        padding: 20px;
+        border-radius: 8px;
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+    .contract-item:hover {
+        background: #fafafa;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .contract-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .contract-icon {
+        width: 40px;
+        height: 40px;
+        fill: #8b0000;
+        flex-shrink: 0;
+    }
+    .contract-text h4 {
+        margin: 0 0 5px 0;
+        color: #333;
+        font-size: 18px;
+    }
+    .contract-text p {
+        margin: 0;
+        color: #777;
+        font-size: 14px;
+    }
+    .btn-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #8b0000;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        transition: background 0.2s;
+        white-space: nowrap;
+    }
+    .btn-download:hover {
+        background: #a51c1c;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px;">
+    <h1 style="color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 15px;">Договоры с компаниями</h1>
+    <p style="color: #666; font-size: 16px; margin-bottom: 20px;">
+        Здесь вы можете скачать типовые договоры и условия целевого обучения от предприятий-партнёров. Внимательно ознакомьтесь с документами перед подачей заявки.
+    </p>
+
+    <div class="contract-list">
+        <!-- Договор 1 -->
+        <div class="contract-item">
+            <div class="contract-info">
+                <svg class="contract-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                <div class="contract-text">
+                    <h4>Типовой договор о целевом обучении (АО «НПО «Сплав»)</h4>
+                    <p>Общие условия, размер стипендии и обязанности сторон.</p>
+                </div>
+            </div>
+            <a href="/static/contracts/contract_splav.pdf" target="_blank" class="btn-download">Скачать PDF</a>
+        </div>
+
+        <!-- Договор 2 -->
+        <div class="contract-item">
+            <div class="contract-info">
+                <svg class="contract-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                <div class="contract-text">
+                    <h4>Договор с ПАО «Туламашзавод»</h4>
+                    <p>Условия прохождения практики и гарантии трудоустройства.</p>
+                </div>
+            </div>
+            <a href="/static/contracts/contract_tulamash.pdf" target="_blank" class="btn-download">Скачать PDF</a>
+        </div>
+
+        <!-- Договор 3 -->
+        <div class="contract-item">
+            <div class="contract-info">
+                <svg class="contract-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                <div class="contract-text">
+                    <h4>Договор с Министерством здравоохранения</h4>
+                    <p>Условия целевого обучения для медицинских специальностей.</p>
+                </div>
+            </div>
+            <a href="/static/contracts/contract_minzdrav.pdf" target="_blank" class="btn-download">Скачать PDF</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

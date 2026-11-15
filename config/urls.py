@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from main.views import about, contacts
-from catalog.views import login_view, logout_view, dashboard_view, profile_view, send_message, employer_events_view, employer_students_view, employer_documents_view
+from catalog.views import login_view, logout_view, dashboard_view, profile_view, send_message, employer_events_view, employer_students_view, employer_documents_view, staff_events_view, staff_students_view, staff_stats_view, companies_view, contracts_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +37,15 @@ urlpatterns = [
     path('employer/events/', employer_events_view, name='employer_events'),
     path('employer/students/', employer_students_view, name='employer_students'),
     path('employer/documents/', employer_documents_view, name='employer_documents'),
+
+    # Сотрудник вуза
+    path('staff/events/', staff_events_view, name='staff_events'),
+    path('staff/students/', staff_students_view, name='staff_students'),
+    path('staff/stats/', staff_stats_view, name='staff_stats'),
+
+    path('companies/', companies_view, name='companies'),
+    path('contracts/', contracts_view, name='contracts'),
+
 ]
 
 if settings.DEBUG:

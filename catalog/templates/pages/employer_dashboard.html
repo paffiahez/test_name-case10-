@@ -11,37 +11,28 @@
     .nav-cards { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; padding: 0 20px 60px; }
     
     .nav-card {
-        background: white;
-        border: 1px solid #eee;
+        background-color: #8b0000; /* Бордовый фон */
+        border: 1px solid #8b0000;
         border-radius: 12px;
         padding: 30px;
         width: 300px;
         text-align: center;
         text-decoration: none;
-        color: #333;
+        color: white; /* Белый текст */
         transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        box-shadow: 0 4px 15px rgba(139, 0, 0, 0.2);
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    
     .nav-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.1);
-        border-color: #8b0000;
+        background-color: #a51c1c;
+        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4);
     }
-    
-    .nav-card svg {
-        width: 50px;
-        height: 50px;
-        fill: #8b0000;
-        margin-bottom: 20px;
-        opacity: 0.8;
-    }
-    
-    .nav-card h3 { color: #8b0000; font-size: 22px; margin: 0 0 10px 0; }
-    .nav-card p { color: #666; font-size: 14px; margin: 0; line-height: 1.5; }
+    .nav-card svg { width: 50px; height: 50px; fill: white; margin-bottom: 20px; opacity: 0.9; }
+    .nav-card h3 { color: white; font-size: 22px; margin: 0 0 10px 0; }
+    .nav-card p { color: #ffdcdc; font-size: 14px; margin: 0; line-height: 1.5; }
 </style>
 {% endblock %}
 
@@ -53,21 +44,21 @@
     </div>
     
     <div class="nav-cards">
-        <!-- 1. Мероприятия (Иконка календаря) -->
+        <!-- 1. Мероприятия -->
         <a href="/employer/events/" class="nav-card">
             <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
             <h3>Мероприятия</h3>
             <p>Календарь событий и заявка на проведение собственного мероприятия.</p>
         </a>
 
-        <!-- 2. Анкеты студентов (Иконка людей) -->
+        <!-- 2. Анкеты студентов -->
         <a href="/employer/students/" class="nav-card">
             <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
             <h3>Анкеты студентов</h3>
             <p>Просмотр навыков, успеваемости и чат с подопечными абитуриентами.</p>
         </a>
 
-        <!-- 3. Документы (Иконка папки/файла) -->
+        <!-- 3. Документы -->
         <a href="/employer/documents/" class="nav-card">
             <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
             <h3>Документы</h3>

@@ -2,14 +2,143 @@
 
 {% block title %}Контакты — ТулГУ{% endblock %}
 
+{% block extra_css %}
+<style>
+    .contacts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+    .contact-card {
+        background-color: #8b0000; /* Бордовый фон */
+        border: 1px solid #5a0000;
+        border-radius: 8px;
+        padding: 25px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        color: white; /* Белый текст */
+        box-shadow: 0 4px 15px rgba(139, 0, 0, 0.2);
+    }
+    .contact-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(139, 0, 0, 0.4);
+        background-color: #a51c1c; /* Чуть светлее при наведении */
+    }
+    .contact-card h3 {
+        margin-top: 0;
+        color: white;
+        font-size: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    .contact-card p {
+        margin: 10px 0;
+        color: #ffdcdc; /* Светло-розовый для текста */
+        font-size: 15px;
+        line-height: 1.5;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .contact-card p strong {
+        color: white;
+        min-width: 80px;
+        display: inline-block;
+    }
+    .contact-card a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+    }
+    .contact-card a:hover {
+        border-bottom: 1px solid white;
+    }
+    .icon-svg {
+        width: 18px;
+        height: 18px;
+        fill: white; /* Белые иконки */
+        flex-shrink: 0;
+        margin-top: 3px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container" style="padding: 40px;">
-    <h1 style="color: #8b0000; border-bottom: 2px solid #8b0000; padding-bottom: 15px;">Наши контакты</h1>
-    <div style="background: #fafafa; border-left: 4px solid #8b0000; padding: 20px; margin-bottom: 20px; border-radius: 6px;">
-        <h3 style="margin-top: 0; color: #333;">Приемная комиссия ТулГУ</h3>
-        <p style="margin: 5px 0; color: #555;">Адрес: 300012, г. Тула, пр. Ленина, д. 92 (Главный корпус)</p>
-        <p style="margin: 5px 0; color: #555;">Телефон: <strong>+7 (4872) 22-33-35</strong></p>
-        <p style="margin: 5px 0; color: #555;">Email: <strong>priem@tsu.tula.ru</strong></p>
+    <h1 style="color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 15px; margin-bottom: 20px;">Наши контакты</h1>
+    <p style="color: #666; font-size: 16px; margin-bottom: 30px;">
+        Если у вас остались вопросы по целевому обучению, поступлению или сотрудничеству с вузом, вы всегда можете обратиться в соответствующие отделы ТулГУ.
+    </p>
+
+    <div class="contacts-grid">
+        
+        <!-- 1. Приемная комиссия -->
+        <div class="contact-card">
+            <h3>Приемная комиссия</h3>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>300012, г. Тула, пр. Ленина, д. 92 (Главный корпус)</span>
+            </p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <a href="tel:+74872223335">+7 (4872) 22-33-35</a>
+            </p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <a href="mailto:priem@tsu.tula.ru">priem@tsu.tula.ru</a>
+            </p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                <span>Пн–Пт: 9:00–17:00, Сб: 9:00–13:00</span>
+            </p>
+        </div>
+
+        <!-- 2. Центр карьеры -->
+        <div class="contact-card">
+            <h3>Центр карьеры ТулГУ</h3>
+            <p style="color: rgba(255,255,255,0.7); font-style: italic; font-size: 14px;">По вопросам заключения целевых договоров и практики</p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>г. Тула, ул. Ф. Энгельса, д. 155 (Учебный корпус № 2)</span>
+            </p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <a href="tel:+74872223350">+7 (4872) 22-33-50</a>
+            </p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <a href="mailto:career@tsu.tula.ru">career@tsu.tula.ru</a>
+            </p>
+        </div>
+
+        <!-- 3. Отдел целевого обучения -->
+        <div class="contact-card">
+            <h3>Целевое обучение</h3>
+            <p style="color: rgba(255,255,255,0.7); font-style: italic; font-size: 14px;">Специализированный отдел по работе с целевиками</p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <a href="tel:+74872223355">+7 (4872) 22-33-55</a>
+            </p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <a href="mailto:target@tsu.tula.ru">target@tsu.tula.ru</a>
+            </p>
+        </div>
+
+        <!-- 4. Техническая поддержка -->
+        <div class="contact-card">
+            <h3>Техническая поддержка</h3>
+            <p style="color: rgba(255,255,255,0.7); font-style: italic; font-size: 14px;">Если вы нашли ошибку на сайте или у вас проблемы с доступом</p>
+            <p>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <a href="mailto:support@tulsu-target.ru">support@tulsu-target.ru</a>
+            </p>
+            <p style="color: #ffdcdc; font-size: 14px; margin-top: 15px;">
+                Время ответа: в течение 1-2 рабочих дней.
+            </p>
+        </div>
     </div>
 </div>
 {% endblock %}

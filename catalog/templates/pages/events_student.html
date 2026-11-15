@@ -25,7 +25,9 @@
     .info-label { color: #777; flex-shrink: 0; font-size: 15px; width: 180px; }
     .info-value { font-weight: bold; color: #333; text-align: right; font-size: 15px; }
     .info-value.highlight { background-color: #fff0f0; color: #8b0000; padding: 2px 8px; border-radius: 4px; border: 1px solid #f0d0d0; }
-    .no-results { display: none; color: #777; font-style: italic; padding: 20px; text-align: center; }
+    .no-results { display: none; color: #777; font-style: italic; padding: 20px; text-align: center; font-size: 16px; }
+    .no-results.show { display: block; }
+    
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 {% endblock %}
@@ -79,95 +81,108 @@
 
 {% block extra_js %}
 <script>
-    // Читаем данные из data-атрибута (VS Code больше не будет ругаться)
-    const eventsData = JSON.parse(document.getElementById('events-data').dataset.events);
-
-    const programList = document.getElementById('programList');
-    const detailsContainer = document.getElementById('detailsContainer');
-    const noResults = document.getElementById('noResults');
-    const filterFormatSelect = document.getElementById('filterFormat');
-    const filterTypeSelect = document.getElementById('filterType');
-    const filterOrgSelect = document.getElementById('filterOrg');
-
-    function getOrgType(orgName) {
-        const lowerOrg = orgName.toLowerCase();
-        if (lowerOrg.includes('тулгу') || lowerOrg.includes('приемная') || lowerOrg.includes('центр карьеры')) return 'uni';
-        return 'employer';
-    }
-
-    function renderSite() {
-        programList.innerHTML = '';
-        detailsContainer.innerHTML = '';
-
-        if (!eventsData || eventsData.length === 0) { 
-            noResults.classList.add('show'); 
-            return; 
-        } else { 
-            noResults.classList.remove('show'); 
+    document.addEventListener("DOMContentLoaded", function() {
+        // Читаем данные из data-атрибута
+        const dataElement = document.getElementById('events-data');
+        if (!dataElement) return;
+        
+        let eventsData = [];
+        try {
+            eventsData = JSON.parse(dataElement.dataset.events);
+        } catch (e) {
+            console.error("Ошибка парсинга JSON", e);
+            return;
         }
 
-        const formatFilter = filterFormatSelect.value;
-        const typeFilter = filterTypeSelect.value;
-        const orgFilter = filterOrgSelect.value;
+        const programList = document.getElementById('programList');
+        const detailsContainer = document.getElementById('detailsContainer');
+        const noResults = document.getElementById('noResults');
+        const filterFormatSelect = document.getElementById('filterFormat');
+        const filterTypeSelect = document.getElementById('filterType');
+        const filterOrgSelect = document.getElementById('filterOrg');
 
-        const filteredEvents = eventsData.filter(ev => {
-            const matchFormat = (formatFilter === 'all' || ev.format === formatFilter);
-            const matchType = (typeFilter === 'all' || ev.type === typeFilter);
-            const matchOrg = (orgFilter === 'all' || getOrgType(ev.org) === orgFilter);
-            return matchFormat && matchType && matchOrg;
-        });
-
-        if (filteredEvents.length === 0) { 
-            noResults.classList.add('show'); 
-            return; 
+        function getOrgType(orgName) {
+            if (!orgName) return 'uni';
+            const lowerOrg = orgName.toLowerCase();
+            if (lowerOrg.includes('тулгу') || lowerOrg.includes('приемная') || lowerOrg.includes('центр карьеры')) return 'uni';
+            return 'employer';
         }
 
-        filteredEvents.forEach((event, index) => {
-            const li = document.createElement('li');
-            li.textContent = event.title;
-            if (index === 0) li.classList.add('active');
-            
-            // Клик по названию мероприятия
-            li.addEventListener('click', function() {
-                document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelectorAll('.detail-card').forEach(el => el.classList.remove('active'));
-                document.getElementById(`card-${event.id}`).classList.add('active');
+        function renderSite() {
+            programList.innerHTML = '';
+            detailsContainer.innerHTML = '';
+
+            // Проверка на пустой список
+            if (!eventsData || eventsData.length === 0) { 
+                noResults.classList.add('show'); 
+                return; 
+            } else { 
+                noResults.classList.remove('show'); 
+            }
+
+            const formatFilter = filterFormatSelect.value;
+            const typeFilter = filterTypeSelect.value;
+            const orgFilter = filterOrgSelect.value;
+
+            const filteredEvents = eventsData.filter(ev => {
+                const matchFormat = (formatFilter === 'all' || ev.format === formatFilter);
+                const matchType = (typeFilter === 'all' || ev.type === typeFilter);
+                const matchOrg = (orgFilter === 'all' || getOrgType(ev.org) === orgFilter);
+                return matchFormat && matchType && matchOrg;
             });
-            programList.appendChild(li);
 
-            // Создаем карточку с деталями
-            const card = document.createElement('div');
-            card.className = `detail-card ${index === 0 ? 'active' : ''}`;
-            card.id = `card-${event.id}`;
-            
-            // Форматируем дату (если она в формате YYYY-MM-DD)
-            let formattedDate = event.date;
-            try {
-                const dateObj = new Date(event.date);
-                formattedDate = dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-            } catch (e) {}
+            // Если после фильтрации пусто
+            if (filteredEvents.length === 0) { 
+                noResults.classList.add('show'); 
+                return; 
+            }
 
-            card.innerHTML = `
-                <h2>${event.title}</h2>
-                <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">${event.org}</span></div>
-                <div class="info-row"><span class="info-label">Дата проведения:</span><span class="info-value">${formattedDate}</span></div>
-                <div class="info-row"><span class="info-label">Тип мероприятия:</span><span class="info-value">${event.type}</span></div>
-                <div class="info-row"><span class="info-label">Форма проведения:</span><span class="info-value highlight">${event.format}</span></div>
-                <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">${event.time || '—'}</span></div>
-                <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
-                <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc || '—'}</span></div>
-            `;
-            detailsContainer.appendChild(card);
-        });
-    }
+            filteredEvents.forEach((event, index) => {
+                // Создаем li для левого меню
+                const li = document.createElement('li');
+                li.textContent = event.title;
+                if (index === 0) li.classList.add('active');
+                
+                li.addEventListener('click', function() {
+                    document.querySelectorAll('#programList li').forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.detail-card').forEach(el => el.classList.remove('active'));
+                    document.getElementById(`card-${event.id}`).classList.add('active');
+                });
+                programList.appendChild(li);
 
-    // Слушатели для фильтров
-    filterFormatSelect.addEventListener('change', renderSite);
-    filterTypeSelect.addEventListener('change', renderSite);
-    filterOrgSelect.addEventListener('change', renderSite);
-    
-    // Первый рендер
-    renderSite();
+                // Создаем карточку
+                const card = document.createElement('div');
+                card.className = `detail-card ${index === 0 ? 'active' : ''}`;
+                card.id = `card-${event.id}`;
+                
+                let formattedDate = event.date;
+                try {
+                    const dateObj = new Date(event.date);
+                    formattedDate = dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+                } catch (e) {}
+
+                card.innerHTML = `
+                    <h2>${event.title}</h2>
+                    <div class="info-row"><span class="info-label">Организатор:</span><span class="info-value">${event.org || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Дата проведения:</span><span class="info-value">${formattedDate || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Тип мероприятия:</span><span class="info-value">${event.type || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Форма проведения:</span><span class="info-value highlight">${event.format || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Длительность:</span><span class="info-value">${event.time || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Адрес:</span><span class="info-value">${event.address || '—'}</span></div>
+                    <div class="info-row"><span class="info-label">Описание:</span><span class="info-value">${event.desc || '—'}</span></div>
+                `;
+                detailsContainer.appendChild(card);
+            });
+        }
+
+        // Обработчики фильтров
+        if (filterFormatSelect) filterFormatSelect.addEventListener('change', renderSite);
+        if (filterTypeSelect) filterTypeSelect.addEventListener('change', renderSite);
+        if (filterOrgSelect) filterOrgSelect.addEventListener('change', renderSite);
+        
+        // Первый запуск
+        renderSite();
+    });
 </script>
 {% endblock %}

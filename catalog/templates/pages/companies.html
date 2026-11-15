@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Компании-партнёры — ТулГУ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .company-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+    .company-card {
+        background: white;
+        border: 1px solid #eee;
+        border-top: 4px solid #8b0000;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .company-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(139, 0, 0, 0.1);
+    }
+    .company-card h3 {
+        color: #8b0000;
+        margin-top: 0;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .company-tag {
+        display: inline-block;
+        background: #fff0f0;
+        color: #8b0000;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        border: 1px solid #f0d0d0;
+    }
+    .company-card p {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    }
+    .company-card strong {
+        color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px;">
+    <h1 style="color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 15px;">Компании-партнёры ТулГУ</h1>
+    <p style="color: #666; font-size: 16px; margin-bottom: 20px;">
+        Эти предприятия ежегодно выделяют целевые места для студентов ТулГУ и гарантируют трудоустройство после выпуска.
+    </p>
+
+    <div class="company-grid">
+        <!-- 1. НПО Сплав -->
+        <div class="company-card">
+            <h3>АО «НПО «Сплав»</h3>
+            <span class="company-tag">Оборонная промышленность</span>
+            <p><strong>Направления:</strong> Машиностроение, Автоматизация, Информатика.</p>
+            <p>Крупнейшее предприятие региона по разработке и производству реактивных систем залпового огня. Предлагает целевикам дополнительную стипендию с 1 курса и оплату общежития.</p>
+        </div>
+
+        <!-- 2. Туламашзавод -->
+        <div class="company-card">
+            <h3>ПАО «Туламашзавод»</h3>
+            <span class="company-tag">Машиностроение</span>
+            <p><strong>Направления:</strong> Машиностроение, Электроэнергетика, Строительство.</p>
+            <p>Одно из старейших машиностроительных предприятий России. Завод заинтересован в инженерах-конструкторах и технологах. Целевики проходят практику на реальном производстве.</p>
+        </div>
+
+        <!-- 3. Тулэнерго -->
+        <div class="company-card">
+            <h3>ПАО «Тулэнерго»</h3>
+            <span class="company-tag">Энергетика</span>
+            <p><strong>Направления:</strong> Электроэнергетика и электротехника.</p>
+            <p>Сетевая компания, обеспечивающая электроснабжение Тульской области. Предлагает стабильное трудоустройство, карьерный рост и льготы на ипотеку для целевиков.</p>
+        </div>
+
+        <!-- 4. Тулагорэлектросеть -->
+        <div class="company-card">
+            <h3>АО «Тулгорэлектросеть»</h3>
+            <span class="company-tag">Энергетика</span>
+            <p><strong>Направления:</strong> Электроэнергетика.</p>
+            <p>Городская электросетевая компания. Целевые договоры с гарантией места в Туле. Студенты получают допуск к работе с современным оборудованием.</p>
+        </div>
+
+        <!-- 5. Минздрав Тульской области -->
+        <div class="company-card">
+            <h3>Министерство здравоохранения Тульской области</h3>
+            <span class="company-tag">Медицина</span>
+            <p><strong>Направления:</strong> Лечебное дело, Педиатрия.</p>
+            <p>Главный заказчик целевых мест для медицинских специальностей. Помимо гарантированного места в больницах и поликлиниках, выплачивает дополнительную стипендию.</p>
+        </div>
+
+        <!-- 6. СберТех -->
+        <div class="company-card">
+            <h3>СберТех (SberTech)</h3>
+            <span class="company-tag">IT</span>
+            <p><strong>Направления:</strong> Информатика и вычислительная техника, Прикладная информатика.</p>
+            <p>Крупный IT-разработчик. Предлагает целевое обучение для будущих программистов, стажировки и работу над реальными проектами в сфере финтеха.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

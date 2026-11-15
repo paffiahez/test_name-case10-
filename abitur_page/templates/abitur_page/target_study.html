@@ -4,26 +4,22 @@
 
 {% block extra_css %}
 <style>
-    /* Стили для списка направлений и карточек */
     .content { display: flex; gap: 30px; padding: 0 40px 40px; flex-wrap: wrap; }
     .sidebar { flex: 1; min-width: 280px; border-right: 1px solid #eee; padding-right: 30px; }
     .program-list { list-style: none; padding: 0; margin: 0; }
     .program-list li { padding: 12px 15px; margin-bottom: 6px; background-color: #f9f9f9; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 14px; line-height: 1.3; }
     .program-list li:hover { background-color: #fff0f0; border-left-color: #8b0000; color: #8b0000; }
     .program-list li.active { background-color: #8b0000; color: white; border-left-color: #5a0000; }
-    
     .details { flex: 2.5; min-width: 400px; padding-left: 20px; }
     .detail-card { display: none; animation: fadeIn 0.3s ease; }
     .detail-card.active { display: block; }
     .detail-card h2 { color: #8b0000; margin-top: 0; border-bottom: 2px solid #8b0000; padding-bottom: 12px; font-size: 22px; }
-    
     .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #eee; gap: 20px; }
     .info-label { color: #777; flex-shrink: 0; font-size: 15px; }
     .info-value { font-weight: bold; color: #333; text-align: right; font-size: 15px; }
     .info-value.price { color: #8b0000; }
     .info-value.highlight { background-color: #fff0f0; color: #8b0000; padding: 2px 8px; border-radius: 4px; border: 1px solid #f0d0d0; }
     
-    /* Сноски */
     .note { margin-top: 20px; font-size: 14px; color: #444; line-height: 1.65; background: #fafafa; padding: 15px; border-radius: 6px; border-left: 3px solid #8b0000; cursor: pointer; transition: all 0.3s ease; }
     .note:hover { background: #f5f5f5; border-left-color: #5a0000; }
     .note-title { color: #8b0000; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; }
@@ -36,16 +32,10 @@
     .note-content-inner p:last-child { margin-bottom: 0; }
     .note-content-inner strong { color: #8b0000; font-weight: 600; }
 
-    /* Программы подготовки (аккордеон) */
-    .programs-list { margin-top: 15px; }
-    .program-item { margin-bottom: 10px; border: 1px solid #eee; border-radius: 6px; overflow: hidden; }
-    .program-header { padding: 12px 15px; background: #f9f9f9; cursor: pointer; font-weight: 600; font-size: 14px; color: #333; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-    .program-header:hover { background: #fff0f0; color: #8b0000; }
-    .program-header::after { content: '+'; font-size: 18px; font-weight: normal; }
-    .program-item.open .program-header::after { content: '−'; }
-    .program-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; }
-    .program-content-inner { padding: 15px; font-size: 13.5px; color: #555; line-height: 1.6; border-top: 1px solid #eee; }
-    
+    .pdf-download { margin-top: 25px; display: inline-flex; align-items: center; gap: 10px; background-color: #f4f4f4; color: #333; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.2s; border: 1px solid #ddd; }
+    .pdf-download:hover { background-color: #8b0000; color: white; border-color: #8b0000; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(139, 0, 0, 0.2); }
+    .pdf-download svg { width: 20px; height: 20px; fill: currentColor; }
+
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     @media (max-width: 768px) { .content { flex-direction: column; padding: 0 20px 20px; } .sidebar { border-right: none; border-bottom: 1px solid #eee; padding-right: 0; padding-bottom: 20px; } .details { padding-left: 0; min-width: auto; } }
 </style>
@@ -70,7 +60,8 @@
             </ul>
         </div>
         <div class="details">
-            <!-- КАРТОЧКА 1: Лечебное дело -->
+            
+            <!-- Карточка 1: Лечебное дело -->
             <div id="card1" class="detail-card active">
                 <h2>31.05.01 Лечебное дело</h2>
                 <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная (Специалитет)</span></div>
@@ -87,9 +78,13 @@
                         <p><strong>Совет:</strong> Заявку на целевое можно подать только в один вуз на одну специальность.</p>
                     </div></div>
                 </div>
+                <a href="/static/plans/plan_medicine.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
             </div>
 
-            <!-- КАРТОЧКА 2: Педиатрия -->
+            <!-- Карточка 2: Педиатрия -->
             <div id="card2" class="detail-card">
                 <h2>31.05.02 Педиатрия</h2>
                 <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная (Специалитет)</span></div>
@@ -106,9 +101,13 @@
                         <p><strong>Совет:</strong> С 2026 года все предложения по целевым местам собраны на портале «Работа России».</p>
                     </div></div>
                 </div>
+                <a href="/static/plans/plan_medicine.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
             </div>
 
-            <!-- КАРТОЧКА 3: Машиностроение -->
+            <!-- Карточка 3: Машиностроение (без программ подготовки) -->
             <div id="card3" class="detail-card">
                 <h2>15.03.01 Машиностроение</h2>
                 <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная</span></div>
@@ -116,71 +115,140 @@
                 <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">4 года</span></div>
                 <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">~ 180 (ЕГЭ)</span></div>
                 <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">~ 171 000 ₽/год</span></div>
-                
-                <div style="margin-top: 25px;">
-                    <h3 style="color: #8b0000; font-size: 18px; margin-bottom: 10px;">Программы подготовки (нажмите, чтобы развернуть):</h3>
-                    <div class="programs-list">
-                        <div class="program-item">
-                            <div class="program-header" onclick="toggleProgram(this)">Машины и технология высокоэффективных процессов обработки материалов</div>
-                            <div class="program-content">
-                                <div class="program-content-inner">
-                                    <p><strong>О программе:</strong> Студенты изучают современные методы обработки материалов (лазерная, плазменная, электроэрозионная обработка), проектирование высокоэффективного оборудования и автоматизацию производственных процессов.</p>
-                                    <p><strong>Кем можно работать:</strong> Инженер-технолог, конструктор, специалист по автоматизации производств, мастер цеха.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="program-item">
-                            <div class="program-header" onclick="toggleProgram(this)">Машины и технология обработки металлов давлением</div>
-                            <div class="program-content">
-                                <div class="program-content-inner">
-                                    <p><strong>О программе:</strong> Направление готовит специалистов по обработке металлов давлением (штамповка, ковка, прессование). Изучаются как традиционные, так и цифровые технологии проектирования штампов.</p>
-                                    <p><strong>Кем можно работать:</strong> Инженер-технолог кузнечно-штамповочного производства, конструктор штампов.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="program-item">
-                            <div class="program-header" onclick="toggleProgram(this)">Оборудование и технология сварочного производства</div>
-                            <div class="program-content">
-                                <div class="program-content-inner">
-                                    <p><strong>О программе:</strong> Подготовка инженеров в области сварочных технологий: от ручной дуговой сварки до роботизированных сварочных комплексов.</p>
-                                    <p><strong>Кем можно работать:</strong> Инженер-технолог сварочного производства, специалист по контролю качества сварки.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="program-item">
-                            <div class="program-header" onclick="toggleProgram(this)">Цифровые технологии аддитивного и литейного производства</div>
-                            <div class="program-content">
-                                <div class="program-content-inner">
-                                    <p><strong>О программе:</strong> Самое современное направление. 3D-печать металлом и пластиком, цифровое моделирование литейных процессов, «умные» заводы.</p>
-                                    <p><strong>Кем можно работать:</strong> Инженер по 3D-печати, технолог литейного производства, специалист по цифровому проектированию.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="note" onclick="toggleNote(this)" style="margin-top: 25px;">
-                    <span class="note-title">Полезно знать (общая информация)</span>
+                <div class="note" onclick="toggleNote(this)">
+                    <span class="note-title">Полезно знать</span>
                     <div class="note-content"><div class="note-content-inner">
                         <p><strong>Шанс поступить:</strong> Проходной балл на целевые места здесь часто ниже, чем на общий бюджет.</p>
                         <p><strong>Про деньги:</strong> Крупные заводы (НПО «Сплав», Туламашзавод) часто платят дополнительную стипендию с 1 курса.</p>
                         <p><strong>Что с отработкой:</strong> Отработка на заводе. Ты получаешь реальный опыт на производстве уже с 3–4 курса.</p>
+                        <p><strong>Совет:</strong> На портале «Работа России» смотри предложения от конкретных заводов.</p>
                     </div></div>
                 </div>
+                <a href="/static/plans/plan_engineering.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
             </div>
 
-            <!-- Остальные карточки (4-8) можно добавить по аналогии или оставить пока пустыми -->
-            <div id="card4" class="detail-card"><h2>15.03.04 Автоматизация</h2><p>Информация скоро появится...</p></div>
-            <div id="card5" class="detail-card"><h2>13.03.02 Электроэнергетика</h2><p>Информация скоро появится...</p></div>
-            <div id="card6" class="detail-card"><h2>08.03.01 Строительство</h2><p>Информация скоро появится...</p></div>
-            <div id="card7" class="detail-card"><h2>20.03.01 Техносферная безопасность</h2><p>Информация скоро появится...</p></div>
-            <div id="card8" class="detail-card"><h2>21.05.04 Горное дело</h2><p>Информация скоро появится...</p></div>
+            <!-- Карточка 4: Автоматизация -->
+            <div id="card4" class="detail-card">
+                <h2>15.03.04 Автоматизация технологических процессов</h2>
+                <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная</span></div>
+                <div class="info-row"><span class="info-label">Целевые места:</span><span class="info-value highlight">14 мест</span></div>
+                <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">4 года</span></div>
+                <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">~ 190 (ЕГЭ)</span></div>
+                <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">~ 171 000 ₽/год</span></div>
+                <div class="note" onclick="toggleNote(this)">
+                    <span class="note-title">Полезно знать</span>
+                    <div class="note-content"><div class="note-content-inner">
+                        <p><strong>Шанс поступить:</strong> Это направление на стыке IT и инженерии.</p>
+                        <p><strong>Про деньги:</strong> Заказчики — химические и оборонные заводы. Часто предлагают подработку во время учебы.</p>
+                        <p><strong>Что с отработкой:</strong> Уточняй, будет ли предприятие оплачивать магистратуру.</p>
+                        <p><strong>Совет:</strong> Если интересно программирование и работа с железом — тебе сюда.</p>
+                    </div></div>
+                </div>
+                <a href="/static/plans/plan_engineering.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
+            </div>
+
+            <!-- Карточка 5: Электроэнергетика -->
+            <div id="card5" class="detail-card">
+                <h2>13.03.02 Электроэнергетика и электротехника</h2>
+                <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная</span></div>
+                <div class="info-row"><span class="info-label">Целевые места:</span><span class="info-value highlight">Есть (квота)</span></div>
+                <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">4 года</span></div>
+                <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">~ 170 (ЕГЭ)</span></div>
+                <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">~ 171 000 ₽/год</span></div>
+                <div class="note" onclick="toggleNote(this)">
+                    <span class="note-title">Полезно знать</span>
+                    <div class="note-content"><div class="note-content-inner">
+                        <p><strong>Шанс поступить:</strong> Энергетика — отрасль со стабильным спросом.</p>
+                        <p><strong>Про деньги:</strong> Компании часто предлагают доплаты, оплату жилья и льготы на ипотеку.</p>
+                        <p><strong>Что с отработкой:</strong> Работа с современным оборудованием и карьерный рост.</p>
+                        <p><strong>Совет:</strong> Целевой договор с «Тулэнерго» — рациональный выбор.</p>
+                    </div></div>
+                </div>
+                <a href="/static/plans/plan_engineering.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
+            </div>
+
+            <!-- Карточка 6: Строительство -->
+            <div id="card6" class="detail-card">
+                <h2>08.03.01 Строительство</h2>
+                <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная</span></div>
+                <div class="info-row"><span class="info-label">Целевые места:</span><span class="info-value highlight">Есть (квота)</span></div>
+                <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">4 года</span></div>
+                <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">~ 165 (ЕГЭ)</span></div>
+                <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">~ 171 000 ₽/год</span></div>
+                <div class="note" onclick="toggleNote(this)">
+                    <span class="note-title">Полезно знать</span>
+                    <div class="note-content"><div class="note-content-inner">
+                        <p><strong>Шанс поступить:</strong> Проходной балл традиционно ниже, чем в IT или медицине.</p>
+                        <p><strong>Про деньги:</strong> Строительные компании часто оплачивают практику и предлагают подработку.</p>
+                        <p><strong>Что с отработкой:</strong> Целевики часто уже на 3–4 курсе получают зарплату.</p>
+                        <p><strong>Совет:</strong> Если заказчик предлагает оплачиваемую практику с 1 курса — это плюс.</p>
+                    </div></div>
+                </div>
+                <a href="/static/plans/plan_construction.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
+            </div>
+
+            <!-- Карточка 7: Техносферная безопасность -->
+            <div id="card7" class="detail-card">
+                <h2>20.03.01 Техносферная безопасность</h2>
+                <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная</span></div>
+                <div class="info-row"><span class="info-label">Целевые места:</span><span class="info-value highlight">Есть (квота)</span></div>
+                <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">4 года</span></div>
+                <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">~ 170 (ЕГЭ)</span></div>
+                <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">~ 171 000 ₽/год</span></div>
+                <div class="note" onclick="toggleNote(this)">
+                    <span class="note-title">Полезно знать</span>
+                    <div class="note-content"><div class="note-content-inner">
+                        <p><strong>Шанс поступить:</strong> Конкурс минимальный.</p>
+                        <p><strong>Про деньги:</strong> Часто предлагают зарплату еще во время учебы.</p>
+                        <p><strong>Что с отработкой:</strong> Работа инженером по охране труда.</p>
+                        <p><strong>Совет:</strong> Один из самых надежных вариантов для трудоустройства.</p>
+                    </div></div>
+                </div>
+                <a href="/static/plans/plan_engineering.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
+            </div>
+
+            <!-- Карточка 8: Горное дело -->
+            <div id="card8" class="detail-card">
+                <h2>21.05.04 Горное дело</h2>
+                <div class="info-row"><span class="info-label">Форма обучения:</span><span class="info-value">Очная (Специалитет)</span></div>
+                <div class="info-row"><span class="info-label">Целевые места:</span><span class="info-value highlight">Есть (квота)</span></div>
+                <div class="info-row"><span class="info-label">Срок обучения:</span><span class="info-value">5 лет</span></div>
+                <div class="info-row"><span class="info-label">Средний балл (2025):</span><span class="info-value">~ 160 (ЕГЭ)</span></div>
+                <div class="info-row"><span class="info-label">Стоимость (платно, 2026):</span><span class="info-value price">~ 171 000 ₽/год</span></div>
+                <div class="note" onclick="toggleNote(this)">
+                    <span class="note-title">Полезно знать</span>
+                    <div class="note-content"><div class="note-content-inner">
+                        <p><strong>Шанс поступить:</strong> Один из самых низких проходных баллов.</p>
+                        <p><strong>Про деньги:</strong> Компании платят высокие зарплаты, особенно вахтовым методом.</p>
+                        <p><strong>Что с отработкой:</strong> Будь готов к разъездам или вахтам.</p>
+                        <p><strong>Совет:</strong> Для тех, кто хочет быстро начать зарабатывать.</p>
+                    </div></div>
+                </div>
+                <a href="/static/plans/plan_mining.pdf" target="_blank" class="pdf-download">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2.5L17.5 9H13V4.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    Скачать план обучения (PDF)
+                </a>
+            </div>
+
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
 <script>
     // Скрипт для переключения направлений
     const listItems = document.querySelectorAll('#programList li');
@@ -198,10 +266,6 @@
                 note.classList.remove('open');
                 note.querySelector('.note-content').style.maxHeight = null;
             });
-            document.querySelectorAll('.program-item').forEach(prog => {
-                prog.classList.remove('open');
-                prog.querySelector('.program-content').style.maxHeight = null;
-            });
         });
     });
 
@@ -211,26 +275,6 @@
         const content = element.querySelector('.note-content');
         if (content.style.maxHeight) { content.style.maxHeight = null; } 
         else { content.style.maxHeight = content.scrollHeight + "px"; }
-    }
-
-    // Скрипт для раскрытия программ подготовки
-    function toggleProgram(element) {
-        const item = element.parentElement;
-        const content = item.querySelector('.program-content');
-        
-        document.querySelectorAll('.program-item').forEach(otherItem => {
-            if (otherItem !== item && otherItem.classList.contains('open')) {
-                otherItem.classList.remove('open');
-                otherItem.querySelector('.program-content').style.maxHeight = null;
-            }
-        });
-
-        item.classList.toggle('open');
-        if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-        } else {
-            content.style.maxHeight = content.scrollHeight + "px";
-        }
     }
 </script>
 {% endblock %}
